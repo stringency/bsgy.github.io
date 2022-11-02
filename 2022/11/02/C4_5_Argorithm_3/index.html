@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
         <title>
-            Tags: 算法 | Yaung のBLOGs
+            决策树 —— C5.0和CART | Yaung のBLOGs
         </title>
         <meta name="author" content="Yaung">
         <meta name="description" content="--相互学习和交流！喜欢请收藏加关注！">
@@ -278,218 +278,92 @@ mjx-container[display="true"] + br {
 </nav>
                     </div>
                     <div id="main">
-                         
-<div class="categories-tags">
+                        
+<div class="article">
+    <div>
+        <h1>决策树 —— C5.0和CART </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <svg class="fa-icon"><use xlink:href="#calendar-solid"></use></svg>
+            </span>
+            2022/11/2
+        </span>
+        
+        <span class="category">
+            <a href="/categories/机器学习/">
+                <span class="icon">
+                    <svg class="fa-icon"><use xlink:href="#bookmark-solid"></use></svg>
+                </span>
+                机器学习
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/python/" style="color: #03a9f4">
+                    python
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/算法/" style="color: #ff7d73">
+                    算法
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/决策树/" style="color: #ff7d73">
+                    决策树
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    <div class="content" v-pre>
+        <h1 id="通过介绍两个实用决策树来深入理解决策树算法">通过介绍两个实用决策树来深入理解决策树算法。</h1>
+<span id="more"></span>
+<blockquote>
+<p><strong>C5.0算法：</strong><br>
+C5.0是c4.5算法的修订版，适用于处理大数据集，采用Boosting方式提高模型准确率，根据能够带来的最大信息增益的字段拆分样本，占用的内存资源较少。</p>
+<p><strong>CART算法：</strong><br>
+CART决策树是一种十分有效的非参数分类和回归方法，通过构建树、修剪树、评估树来构建一个二叉树。当终结点是连续变量时，该树为回归树;当终结点是分类变量，该树为分类树。</p>
+<p><strong>在Python中，scikit-learn使用CART算法的优化版本;然而，
+scikit-learn实现目前不支持分类变量。</strong></p>
+</blockquote>
+<h1 id="c5.0算法"><strong>C5.0算法</strong></h1>
+<blockquote>
+<p>1、C5.0 算法是 C4.5 的一个商业化版本，没有十分具体的算法过程。</p>
+<p>2、C5.0
+是一种多叉树（即如果根节点或中间节点存在连续型的自变量，则该变量会一分为二的展开两个分支；如果根节点或中间节点存在离散的自变量，则该变量会根据离散变量的水平数分开多个分支），就会导致某个变量一旦被使用，后面的节点将不会再启用该变量。</p>
+</blockquote>
+<h1 id="cart算法"><strong>CART算法</strong></h1>
+<blockquote>
+<p>1、CART 算法是一颗二叉树 ( 回归树 )
+，也就是一个结点一般只有左右两个孩子结点。</p>
+<p>2、CART 算法是通过基尼系数 ( Gini coefficient/index )
+来进行最优分割的。</p>
+</blockquote>
+<p><em>----以上为个人思考与见解，有误请指点，有想法也可联系交流</em></p>
+<p><span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="7.919ex" height="0.036ex" role="img" focusable="false" viewBox="0 0 3500 16"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3250,0)"><path data-c="A0" d=""></path></g></g></g></svg></mjx-container></span><strong>谢谢观看！</strong></p>
+<p><a target="_blank" rel="noopener" href="https://stringency.github.io/2022/11/02/C4_5_Argorithm_1/">决策树
+—— C4.5 (一) 算法简述</a><br>
+<a target="_blank" rel="noopener" href="https://stringency.github.io/2022/11/02/C4_5_Argorithm_2/">决策树
+—— C4.5 (二) 剪枝细述</a></p>
+
+    </div>
     
-    <div class="all-s">
-        
-        
-        <span>
-            <a href="/tags/python/" style="background: #00bcd4">
-                <span class="icon">
-                    <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                </span>
-                python
-            </a>
-        </span>
-        
-        
-        <span>
-            <a href="/tags/算法/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                </span>
-                算法
-            </a>
-        </span>
-        
-        
-        <span>
-            <a href="/tags/决策树/" style="background: #03a9f4">
-                <span class="icon">
-                    <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                </span>
-                决策树
-            </a>
-        </span>
-        
-        
-        <span>
-            <a href="/tags/c-c/" style="background: #00bcd4">
-                <span class="icon">
-                    <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                </span>
-                c/c++
-            </a>
-        </span>
-        
-        
-        <span>
-            <a href="/tags/树/" style="background: #ff7d73">
-                <span class="icon">
-                    <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                </span>
-                树
-            </a>
-        </span>
-        
-    </div>
-    <div id="archives">
-        
-        <div class="timeline">
-            <div class="timeline-tail"></div>
-            <div class="timeline-content">
-                <div class="item-time">2022/11/2</div>
-                <a href="/2022/11/02/C4_5_Argorithm_2/">
-                    <h3>决策树 —— C4.5 (二) 剪枝细述</h3>
-                </a>
-                <div class="info">
-                    
-                    <span class="category">
-                        <a href="/categories/机器学习/">
-                            <span class="icon">
-                                <svg class="fa-icon"><use xlink:href="#bookmark-solid"></use></svg>
-                            </span>
-                            机器学习
-                        </a>
-                    </span>
-                    
-                    
-                    <span class="tags">
-                        <span class="icon">
-                            <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/python/" style="color: #ff7d73">
-                                python
-                            </a>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/算法/" style="color: #ff7d73">
-                                算法
-                            </a>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/决策树/" style="color: #03a9f4">
-                                决策树
-                            </a>
-                        </span>
-                        
-                    </span>
-                    
-                </div>
-            </div>
-        </div>
-        
-        <div class="timeline">
-            <div class="timeline-tail"></div>
-            <div class="timeline-content">
-                <div class="item-time">2022/11/2</div>
-                <a href="/2022/11/02/C4_5_Argorithm_1/">
-                    <h3>决策树 —— C4.5 (一) 算法简述</h3>
-                </a>
-                <div class="info">
-                    
-                    <span class="category">
-                        <a href="/categories/机器学习/">
-                            <span class="icon">
-                                <svg class="fa-icon"><use xlink:href="#bookmark-solid"></use></svg>
-                            </span>
-                            机器学习
-                        </a>
-                    </span>
-                    
-                    
-                    <span class="tags">
-                        <span class="icon">
-                            <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/python/" style="color: #00bcd4">
-                                python
-                            </a>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/算法/" style="color: #ffa2c4">
-                                算法
-                            </a>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/决策树/" style="color: #ffa2c4">
-                                决策树
-                            </a>
-                        </span>
-                        
-                    </span>
-                    
-                </div>
-            </div>
-        </div>
-        
-        <div class="timeline">
-            <div class="timeline-tail"></div>
-            <div class="timeline-content">
-                <div class="item-time">2022/11/2</div>
-                <a href="/2022/11/02/C4_5_Argorithm_3/">
-                    <h3>决策树 —— C5.0和CART</h3>
-                </a>
-                <div class="info">
-                    
-                    <span class="category">
-                        <a href="/categories/机器学习/">
-                            <span class="icon">
-                                <svg class="fa-icon"><use xlink:href="#bookmark-solid"></use></svg>
-                            </span>
-                            机器学习
-                        </a>
-                    </span>
-                    
-                    
-                    <span class="tags">
-                        <span class="icon">
-                            <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/python/" style="color: #ff7d73">
-                                python
-                            </a>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/算法/" style="color: #ffa2c4">
-                                算法
-                            </a>
-                        </span>
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/决策树/" style="color: #00bcd4">
-                                决策树
-                            </a>
-                        </span>
-                        
-                    </span>
-                    
-                </div>
-            </div>
-        </div>
-        
-    </div>
+    
 </div>
                              
 <footer id="footer">
