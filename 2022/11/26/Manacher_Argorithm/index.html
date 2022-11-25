@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
         <title>
-            （马老板专属）广东工业大学2022年《C语言程序设计》--期末设计 | Yaung のBLOGs
+            Manacher算法（已经化骨分析） | Yaung のBLOGs
         </title>
         <meta name="author" content="Yaung">
         <meta name="description" content="--相互学习和交流！喜欢请收藏加关注！">
@@ -281,22 +281,22 @@ mjx-container[display="true"] + br {
                         
 <div class="article">
     <div>
-        <h1>（马老板专属）广东工业大学2022年《C语言程序设计》--期末设计 </h1>
+        <h1>Manacher算法（已经化骨分析） </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <svg class="fa-icon"><use xlink:href="#calendar-solid"></use></svg>
             </span>
-            2022/11/21
+            2022/11/26
         </span>
         
         <span class="category">
-            <a href="/categories/程序设计/">
+            <a href="/categories/算法分析/">
                 <span class="icon">
                     <svg class="fa-icon"><use xlink:href="#bookmark-solid"></use></svg>
                 </span>
-                程序设计
+                算法分析
             </a>
         </span>
         
@@ -308,15 +308,15 @@ mjx-container[display="true"] + br {
             
             <span class="tag">
                 
-                <a href="/tags/C-C/" style="color: #00a596">
-                    C/C++
+                <a href="/tags/c-c/" style="color: #ffa2c4">
+                    c/c++
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/课程作业/" style="color: #ffa2c4">
-                    课程作业
+                <a href="/tags/回文串/" style="color: #00a596">
+                    回文串
                 </a>
             </span>
             
@@ -324,383 +324,130 @@ mjx-container[display="true"] + br {
         
     </div>
     <div class="content" v-pre>
-        <h1 id="c语言期末设计源码">C语言期末设计源码</h1>
+        <h1 id="manacher算法建议约上你便宜的草稿本一起理解">Manacher算法（建议约上你便宜的草稿本一起理解！）</h1>
 <span id="more"></span>
-<pre><code>#include&lt;stdio.h&gt;
-#include&lt;stdlib.h&gt;
-#include&lt;string.h&gt;
-
-/*
-    约定程序运行后，首先就必须先把所有数据输入，之后就不能再输入数据了。
-*/
-
-struct CourseInfo {
-    char courseCode[10];    //课程编号
-    char courseName[20];    //课程名称
-    char courseType[10];    //课程类别
-    int  totalPeriod;       //总学时
-    int  classPeriod;       //授课学时
-    int  experiPeriod;      //上机学时
-    float creditHour;      //学分
-    int  term;              //开课学期
-};
-
-struct StuCourInfo {
-    int stuNo;              //学号；
-    char courseCode[10];    //课程编号
-};
-
-struct CourseInfo courses[100];
-struct StuCourInfo stus[100];
-
-int courseCnt = 0; // 录入的课程数目
-int stuCnt = 0;    // 录入的学生选课数目
-
-// 程序入口
-void go();
-
-// 打印菜单
-void menu();
-
-// 录入数据
-void input();
-
-// 浏览课程数据
-void browseCourses();
-
-// 查询选课
-void getSelectedCourses();
-
-// 查询课程信息
-void getCourseInfo();
-
-int main(){
-    go();
-    return 0;
-}
-
-void go(){
-    while(true){
-        menu();
-        printf("请按照菜单提示输入您的操作编号：\n");
-        int choice = 0;
-        scanf("%d", &amp;choice);
-        if(choice == 0){
-            printf("您已经退出系统！\n");
-            return;
-        }else if(choice == 1){
-            input();
-        }else if(choice == 2){
-            browseCourses();
-        }else if(choice == 3){
-            getCourseInfo();
-        }else if(choice == 4){
-            getSelectedCourses();
-        }else{
-            printf("输入错误！\n");
+<p>为了表述方便，我们定义一个新概念臂长，表示中心扩展算法向外扩展的长度。如果一个位置的最大回文字符串长度为
+2 * length + 1 ，其臂长为 length。</p>
+<p>下面的讨论只涉及长度为奇数的回文字符串。长度为偶数的回文字符串我们将会在最后与长度为奇数的情况统一起来。</p>
+<p>思路与算法</p>
+<p>在中心扩展算法的过程中，我们能够得出每个位置的臂长。那么当我们要得出以下一个位置
+i 的臂长时，能不能利用之前得到的信息呢？</p>
+<p>答案是肯定的。具体来说，如果位置 j 的臂长为 length，并且有 j + length
+&gt; i，如下所示：</p>
+<blockquote>
+<h2 id="情况一j-length---i-2-n">情况一：j + length - i = 2 &gt; n</h2>
+<p><u>| a | b | a | b |</u> a <u>| b | a | b | e |</u></p>
+<p>j 为中间没有画横线的 a 的索引，length
+为左边或者右边画横线元素的个数，此处 length 为 4</p>
+<p><u>| b |</u> a <u>| b |</u> ~~ <u>| b |</u> a <u>| b |</u></p>
+<p>( '~' 仅用于在表达时候分隔两个子串，没有实际意义)</p>
+<p>以没画线的 a 拆分开两个 bab 和 bab 子串。</p>
+<p>对于左边的子串 bab ，2 * j - i 为 a 的索引，n
+为左边子串左边或者右边画线部分元素的个数，此处 n 为 1；</p>
+<p>对于右边的子串 bab ，i 为 a 的索引，表示为：当前从 i
+进行中心扩展，画线部分是可以跳过不判断的部分元素。</p>
+</blockquote>
+<blockquote>
+<h2 id="情况二j-length---i-1-n">情况二：j + length - i = 1 &lt; n</h2>
+<div class="line-block">b <u>| a | c | a |</u> b <u>| a | c | a |</u> e
+|</div>
+<p>j 为中间没有画横线的 b 的索引，length
+为左边或者右边画横线元素的个数，此处 length 为 3</p>
+<p><u>| b | a |</u> c <u>| a | b |</u> ~~ <u>| a |</u> c <u>| a
+|</u></p>
+<p>( '~' 仅用于在表达时候分隔两个子串，没有实际意义)</p>
+<p>以没画线的 b 拆分开两个 bacab 和 aca
+子串。(这次拆分保留了这没画横线的 b )</p>
+<p>对于左边的子串 bacab ，2 * j - i 为 c 的索引，n
+为左边子串左边或者右边画线部分元素的个数，此处 n 为 2；</p>
+<p>对于右边的子串 aca ，i 为 c 的索引，表示为：当前从 i
+进行中心扩展，画线部分是可以跳过不判断的部分元素。</p>
+</blockquote>
+<p>当在位置 i 开始进行中心拓展时，我们可以先找到 i 关于 j 的对称点 2 * j
+- i。那么如果点 2 * j - i 的臂长等于 n，我们就可以知道，点 i
+的臂长至少为 min(j + length - i, n)。那么我们就可以直接跳过 i 到 i +
+min(j + length - i, n) 这部分，从 i + min(j + length - i, n) + 1
+开始拓展。</p>
+<p>我们只需要在中心扩展法的过程中记录右臂在最右边的回文字符串，将其中心作为
+j，在计算过程中就能最大限度地避免重复计算。</p>
+<p>那么现在还有一个问题：如何处理长度为偶数的回文字符串呢？</p>
+<p>我们可以通过一个特别的操作将奇偶数的情况统一起来：我们向字符串的头尾以及每两个字符中间添加一个特殊字符
+#，比如字符串 aaba 处理后会变成
+#a#a#b#a#。那么原先长度为偶数的回文字符串 aa
+会变成长度为奇数的回文字符串 #a#a#，而长度为奇数的回文字符串 aba
+会变成长度仍然为奇数的回文字符串
+#a#b#a#，我们就不需要再考虑长度为偶数的回文字符串了。</p>
+<p>注意这里的特殊字符不需要是没有出现过的字母，我们可以使用任何一个字符来作为这个特殊字符。这是因为，当我们只考虑长度为奇数的回文字符串时，每次我们比较的两个字符奇偶性一定是相同的，所以原来字符串中的字符不会与插入的特殊字符互相比较，不会因此产生问题。</p>
+<pre><code>public String longestPalindrome(String s) {
+        // 这样初始化值为了对第一个 # 在end - start + 1 时候能判定为是回文字符串，并且也默认规定了是非法数组下标作为默认
+        int start = 0, end = -1;// 最长子串的范围下标标记
+        // 化解偶数个数的解决问题，使得和奇数方法统一
+        StringBuffer t = new StringBuffer("#");
+        for (int i = 0; i &lt; s.length(); ++i) {
+            t.append(s.charAt(i));
+            t.append('#');
         }
-    }
-}
+//      t.append('#');//这个删除，加了这个后面结尾就 "##" 两个了
+        s = t.toString();
 
-void menu(){
-    printf("***选课系统***\n");
-    printf("1--&gt;录入数据\n");
-    printf("2--&gt;浏览课程\n");
-    printf("3--&gt;查询课程\n");
-    printf("4--&gt;查询选课\n");
-    printf("0--&gt;退出\n");
-}
-
-void input(){
-    printf("11--&gt;录入课程数据\n");
-    printf("12--&gt;录入选课数据\n");
-    printf("请输入录入您的选择（11/22）：\n");
-    int choice = 0;
-    scanf("%d", &amp;choice);
-    int cnt = 0;
-    printf("请输入录入数据条数：\n");
-    scanf("%d", &amp;cnt);
-    if(choice == 11){
-        courseCnt = cnt;
-        printf("请录入课程信息（格式示例：1 C语言 编程语言 30 20 10 1 1）：\n");
-        for(int i = 0; i &lt; cnt; i++){
-            scanf("%s", &amp;courses[i].courseCode);
-            scanf("%s", &amp;courses[i].courseName);
-            scanf("%s", &amp;courses[i].courseType);
-            scanf("%d", &amp;courses[i].totalPeriod);
-            scanf("%d", &amp;courses[i].classPeriod);
-            scanf("%d", &amp;courses[i].experiPeriod);
-            scanf("%f", &amp;courses[i].creditHour);
-            scanf("%d", &amp;courses[i].term);
-        }
-
-        FILE * fp=fopen ("course.txt", "w") ; //打开文件
-        if(NULL==fp)
-        {
-            printf ("Failed to open the file !\n");
-            exit(0);
-        }
-
-        for(int i = 0; i &lt; cnt; i++){
-            fputs(courses[i].courseCode, fp);
-            fputs(" ", fp);
-            fputs(courses[i].courseName, fp);
-            fputs(" ", fp);
-            fputs(courses[i].courseType, fp);
-            fputs(" ", fp);
-
-            char strTotalPeriod[10];
-            itoa(courses[i].totalPeriod, strTotalPeriod, 10);
-            fputs(strTotalPeriod, fp);
-            fputs(" ", fp);
-
-            char strClassPeriod[10];
-            itoa(courses[i].classPeriod, strClassPeriod, 10);
-            fputs(strClassPeriod, fp);
-            fputs(" ", fp);
-
-            char strExperiPeriod[10];
-            itoa(courses[i].experiPeriod, strExperiPeriod, 10);
-            fputs(strExperiPeriod, fp);
-            fputs(" ", fp);
-
-            char strCreditHour[10];
-            sprintf(strCreditHour, "%.1f", courses[i].creditHour);
-            fputs(strCreditHour, fp);
-            fputs(" ", fp);
-
-            char strTerm[10];
-            itoa(courses[i].term, strTerm, 10);
-            fputs(strTerm, fp);
-            fputs("\n", fp);
-        }
-        fclose(fp); //关闭文件
-        printf("数据已经录入完毕！\n");
-    }else if(choice == 12){
-        stuCnt = cnt;
-        printf("请录入选课信息（格式示例：201901 1）：\n");
-        for(int i = 0; i &lt; cnt; i++){
-            scanf("%d", &amp;stus[i].stuNo);
-            scanf("%s", &amp;stus[i].courseCode);
-
-        }
-
-        FILE * fp=fopen ("student.txt", "w") ; //打开文件
-        if(NULL==fp)
-        {
-            printf ("Failed to open the file !\n");
-            exit(0);
-        }
-
-        for(int i = 0; i &lt; cnt; i++){
-            char strStuNo[10];
-            itoa(stus[i].stuNo, strStuNo, 10);
-            fputs(strStuNo, fp);
-            fputs(" ", fp);
-
-            fputs(stus[i].courseCode, fp);
-            fputs(" ", fp);
-
-            fputs("\n", fp);
-        }
-        fclose(fp); //关闭文件
-        printf("数据已经录入完毕！\n");
-    }else{
-        printf("输入错误！\n");
-    }
-    printf("\n");
-}
-
-void browseCourses(){
-    printf("课程信息如下（每次显示10个，按任意键继续显示）：");
-    FILE * fp=fopen ("course.txt", "r") ; //打开文件
-    if(NULL==fp)
-    {
-        printf ("Failed to open the file !\n");
-        exit(0);
-    }
-
-    for(int i = 0; i &lt; courseCnt; i++){
-        fscanf(fp, "%s %s %s %d %d %d %f %d\n",
-            &amp;courses[i].courseCode,
-            &amp;courses[i].courseName,
-            &amp;courses[i].courseType,
-            &amp;courses[i].totalPeriod,
-            &amp;courses[i].classPeriod,
-            &amp;courses[i].experiPeriod,
-            &amp;courses[i].creditHour,
-            &amp;courses[i].term);
-    }
-    fclose(fp); //关闭文件
-
-    for(int i = 0; i &lt; courseCnt; i++){
-        if(i != 0 &amp;&amp; (i%10 == 0)){
-            printf("请输入任意键，继续显示...\n");
-            getchar();
-            getchar();
-        }
-        printf("%s %s %s %d %d %d %f %d\n",
-            courses[i].courseCode,
-            courses[i].courseName,
-            courses[i].courseType,
-            courses[i].totalPeriod,
-            courses[i].classPeriod,
-            courses[i].experiPeriod,
-            courses[i].creditHour,
-            courses[i].term);
-    }
-    printf("数据已经全部显示！\n\n");
-}
-
-void getSelectedCourses(){
-    printf("请输入课程号：\n");
-    char classCode[10];
-    scanf("%s", classCode);
-    printf("选修课程号为%s的学生如下：\n", classCode);
-    FILE * fp=fopen ("student.txt", "r") ; //打开文件
-    if(NULL==fp)
-    {
-        printf ("Failed to open the file !\n");
-        exit(0);
-    }
-    for(int i = 0; i &lt; stuCnt; i++){
-        fscanf(fp, "%d %s\n", &amp;stus[i].stuNo, &amp;stus[i].courseCode);
-    }
-    fclose(fp); //关闭文件
-    for(int i = 0; i &lt; stuCnt; i++){
-        if(strcmp(classCode, stus[i].courseCode) == 0){
-            printf("%d\n", stus[i].stuNo);
-        }
-    }
-    printf("数据已经全部显示！\n\n");
-}
-
-void getCourseInfo(){
-    printf("31--&gt;根据课程编号查询课程\n");
-    printf("32--&gt;根据课程名称查询课程\n");
-    printf("33--&gt;根据课程类别查询课程\n");
-    printf("34--&gt;根据开课学期查询课程\n");
-    printf("35--&gt;根据课程学分查询课程\n");
-
-    FILE * fp=fopen ("course.txt", "r") ; //打开文件
-    if(NULL==fp)
-    {
-        printf ("Failed to open the file !\n");
-        exit(0);
-    }
-
-    for(int i = 0; i &lt; courseCnt; i++){
-        fscanf(fp, "%s %s %s %d %d %d %f %d\n",
-            &amp;courses[i].courseCode,
-            &amp;courses[i].courseName,
-            &amp;courses[i].courseType,
-            &amp;courses[i].totalPeriod,
-            &amp;courses[i].classPeriod,
-            &amp;courses[i].experiPeriod,
-            &amp;courses[i].creditHour,
-            &amp;courses[i].term);
-    }
-    fclose(fp); //关闭文件
-
-    printf("请输入您的查询条件编号：\n");
-    int choice = 0;
-    scanf("%d", &amp;choice);
-    if(choice == 31){
-        printf("请输入课程编号：\n");
-        char courseCode[10];
-        scanf("%s", courseCode);
-        for(int i = 0; i &lt; courseCnt; i++){
-            if(strcmp(courseCode, courses[i].courseCode) == 0){
-                printf("%s %s %s %d %d %d %f %d\n",
-                courses[i].courseCode,
-                courses[i].courseName,
-                courses[i].courseType,
-                courses[i].totalPeriod,
-                courses[i].classPeriod,
-                courses[i].experiPeriod,
-                courses[i].creditHour,
-                courses[i].term);
+        List&lt;Integer&gt; arm_len = new ArrayList&lt;Integer&gt;();
+        int right = -1, j = -1; // 右臂可摸到最远地方，和次数最长子串中心点 j
+        // 从左向右开拓 n 的数据，以 j 区分已知 n 区和搜索区，顺便获取最长子串
+        for (int i = 0; i &lt; s.length(); ++i) {
+            int cur_arm_len;// 此时最大子串臂长
+            if (right &gt;= i) {
+                // 存在搜索范围，通过对称点记录的 n 值进行开拓右边未知可搜索领域
+                int i_sym = j * 2 - i;// 对称点
+                // 取最小臂长搜索优化时间复杂度，因为右边为未知领域，如：bacabacae
+                int min_arm_len = Math.min(arm_len.get(i_sym), right - i);
+                // 确定了搜索范围，开始搜索 n 值
+                // PS：原来传参没有 - 1 和 + 1，这样会导致循环了一次不必要的循环
+                cur_arm_len = expand(s, i - min_arm_len - 1, i + min_arm_len + 1);
+            } else {
+                // 因为需要有已知的 n 进行操作，不存在搜索范围，说明需搜索 n 值
+                cur_arm_len = expand(s, i, i);
+            }
+            arm_len.add(cur_arm_len);// 将臂长加入记录中
+            // 找到新的更大的臂长去触摸更远的地方（更远的搜索范围），更新触摸范围和对称中心 j 值
+            if (i + cur_arm_len &gt; right) {
+                j = i;
+                right = i + cur_arm_len;
+            }
+            // 如果新的臂长形成的子串大于原来记录的最大子串，则更新数据
+            // PS：原来没有 + 1 也运行成功是因为加了 '#' 的容错性，改后才是正确的标记最长回文子串的元素个数
+            if (cur_arm_len * 2 + 1 &gt; end - start + 1) {
+                start = i - cur_arm_len;
+                end = i + cur_arm_len;
             }
         }
-        printf("数据已经全部显示！\n");
-    }else if(choice == 32){
-        printf("请输入课程名称：\n");
-        char courseName[10];
-        scanf("%s", courseName);
-        for(int i = 0; i &lt; courseCnt; i++){
-            if(strcmp(courseName, courses[i].courseName) == 0){
-                printf("%s %s %s %d %d %d %f %d\n",
-                courses[i].courseCode,
-                courses[i].courseName,
-                courses[i].courseType,
-                courses[i].totalPeriod,
-                courses[i].classPeriod,
-                courses[i].experiPeriod,
-                courses[i].creditHour,
-                courses[i].term);
+        // 删除 '#' 还原字符串
+        StringBuffer ans = new StringBuffer();
+        for (int i = start; i &lt;= end; ++i) {
+            if (s.charAt(i) != '#') {
+                ans.append(s.charAt(i));
             }
         }
-        printf("数据已经全部显示！\n");
-    }else if(choice == 33){
-        printf("请输入课程类别：\n");
-        char courseType[10];
-        scanf("%s", courseType);
-        for(int i = 0; i &lt; courseCnt; i++){
-            if(strcmp(courseType, courses[i].courseType) == 0){
-                printf("%s %s %s %d %d %d %f %d\n",
-                courses[i].courseCode,
-                courses[i].courseName,
-                courses[i].courseType,
-                courses[i].totalPeriod,
-                courses[i].classPeriod,
-                courses[i].experiPeriod,
-                courses[i].creditHour,
-                courses[i].term);
-            }
-        }
-        printf("数据已经全部显示！\n");
-    }else if(choice == 34){
-        printf("请输入开课学期：\n");
-        int term = 0;
-        scanf("%d", &amp;term);
-        for(int i = 0; i &lt; courseCnt; i++){
-            if(term == courses[i].term){
-                printf("%s %s %s %d %d %d %f %d\n",
-                courses[i].courseCode,
-                courses[i].courseName,
-                courses[i].courseType,
-                courses[i].totalPeriod,
-                courses[i].classPeriod,
-                courses[i].experiPeriod,
-                courses[i].creditHour,
-                courses[i].term);
-            }
-        }
-        printf("数据已经全部显示！\n");
-    }else if(choice == 35){
-        printf("请输入学分：\n");
-        float creditHour = 0.0;
-        scanf("%f", &amp;creditHour);
-        for(int i = 0; i &lt; courseCnt; i++){
-            if(creditHour == courses[i].creditHour){
-                printf("%s %s %s %d %d %d %f %d\n",
-                courses[i].courseCode,
-                courses[i].courseName,
-                courses[i].courseType,
-                courses[i].totalPeriod,
-                courses[i].classPeriod,
-                courses[i].experiPeriod,
-                courses[i].creditHour,
-                courses[i].term);
-            }
-        }
-        printf("数据已经全部显示！\n");
-    }else{
-        printf("输入错误！\n");
+        return ans.toString();
     }
-    printf("\n");
-}</code></pre>
-<p><em>----以上为个人思考与见解，有误请指点，有想法也可联系交流</em></p>
+
+    // 求以 i 为中心的n，n为以 i 为中心字串的臂长
+    public int expand(String s, int left, int right) {
+        while (left &gt;= 0 &amp;&amp; right &lt; s.length() &amp;&amp; s.charAt(left) == s.charAt(right)) {
+            --left;
+            ++right;
+        }
+        return (right - left - 2) / 2;// (right - left)/2 - 1 ，因为多循环了一次
+    }</code></pre>
+<blockquote>
+<p><strong>复杂度分析</strong></p>
+<p>时间复杂度：O(n)，其中 nnn
+是字符串的长度。由于对于每个位置，扩展要么从当前的最右侧臂长 right
+开始，要么只会进行一步，而 right 最多向前走 O(n) 步，因此算法的复杂度为
+O(n)。</p>
+<p>空间复杂度：O(n)，我们需要 O(n) 的空间记录每个位置的臂长。</p>
+</blockquote>
+<h5 id="例题参考5.最长回文子串1">例题参考：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-palindromic-substring/description/">5.最长回文子串</a></h5>
+<p><em>----以上为个人思考与见解，有误请指点，有想法也可联系交流！</em></p>
 <p><span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="7.919ex" height="0.036ex" role="img" focusable="false" viewBox="0 0 3500 16"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3250,0)"><path data-c="A0" d=""></path></g></g></g></svg></mjx-container></span><strong>谢谢观看！</strong></p>
 
     </div>
