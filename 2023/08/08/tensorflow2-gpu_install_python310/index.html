@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
         <title>
-            决策树 —— C5.0和CART | Yaung のBLOGs
+            小白入手Tensorflow-gpu==2.10.0安装教程 | Yaung のBLOGs
         </title>
         <meta name="author" content="Yaung">
         <meta name="description" content="--相互学习和交流！喜欢请收藏加关注！">
@@ -281,14 +281,14 @@ mjx-container[display="true"] + br {
                         
 <div class="article">
     <div>
-        <h1>决策树 —— C5.0和CART </h1>
+        <h1>小白入手Tensorflow-gpu==2.10.0安装教程 </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <svg class="fa-icon"><use xlink:href="#calendar-solid"></use></svg>
             </span>
-            2022/11/2
+            2023/8/8
         </span>
         
         <span class="category">
@@ -315,15 +315,15 @@ mjx-container[display="true"] + br {
             
             <span class="tag">
                 
-                <a href="/tags/决策树/" style="color: #00a596">
-                    决策树
+                <a href="/tags/tensorflow2/" style="color: #03a9f4">
+                    tensorflow2
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/机器学习/" style="color: #00a596">
-                    机器学习
+                <a href="/tags/教程/" style="color: #00bcd4">
+                    教程
                 </a>
             </span>
             
@@ -331,35 +331,99 @@ mjx-container[display="true"] + br {
         
     </div>
     <div class="content" v-pre>
-        <h1 id="通过介绍两个实用决策树来深入理解决策树算法">通过介绍两个实用决策树来深入理解决策树算法。</h1>
+        <h1 id="一安装前提示如果时间过久出现改动此教程可能出现一些新bug">一、安装前提示！！(如果时间过久出现改动，此教程可能出现一些新bug！)</h1>
+<h2 id="来自tensorflow官方信息">1.来自tensorflow官方信息</h2>
+<blockquote>
+<p><strong>Note:</strong> GPU support on native-Windows is only
+available for 2.10 or earlier versions, starting in TF 2.11, CUDA build
+is not supported for Windows. For using TensorFlow GPU on Windows, you
+will need to build/install TensorFlow in WSL2 or use tensorflow-cpu with
+TensorFlow-DirectML-Plugin</p>
+<p><strong>概要:</strong>
+<strong>Windows上的GPU支持仅适用于2.10或更早的版本，从tensorflow
+2.11开始，Windows不支持CUDA构建</strong>。后面的版本需要其它的操作，但是到我发表这个文章为止，<strong>网上大部分都是使用2.10版本以前的方法，很多人会不知道这个改动根据网上旧版教程并且按照一律最新原则</strong>，安装最新版本导致各种奇怪bug。</p>
+</blockquote>
+<h2 id="来自python官方信息">2.来自python官方信息</h2>
+<blockquote>
+<p><strong>pip install tensorflow-gpu==2.12.0:</strong> tensorflow and
+tensorflow-gpu have been the same package since TensorFlow 2.1, released
+in September 2019. Although the checksums differ due to metadata, they
+were built in the same way and both provide GPU support via Nvidia CUDA.
+As of December 2022, tensorflow-gpu has been removed and has been
+replaced with this new, empty package that generates an error upon
+.installation.</p>
+<p><strong>概要:</strong>
+python官方已经在截至2022年12月，<strong>tensorflow-gpu的2.12.0版本已被移除</strong>，并已被这个新的空包所取代，该包在安装时产生错误，但旧版的2.10.0等等的仍然可以用。而且后续也不会更新。直接pip安装tensorflow-gpu会默认安装2.12.0(我是<strong>python
+3.10</strong>)，这样安装会直接报错，说什么什么没有运行，然后下面说不是pip的问题，简单来说就是这个包已经没有了你安装不了。因此安装适合应该带上"<strong>==2.10.0</strong>"<strong>(可能是最新最简单的版本)</strong>。</p>
+</blockquote>
+<h2 id="补充">3.补充</h2>
+<blockquote>
+<p>网上也有说官方网站说cpu和gpu模式已经合并起来直接装tensorflow就行，我试过2.10.0和2.12.0(目前最新版)都只有cpu版本，然而我也没看见官方有这个说明，尚不清楚这个方法是否可行。</p>
+</blockquote>
 <span id="more"></span>
+<h1 id="二开始安装tensorflow-gpu2.10.0">二、开始安装Tensorflow-gpu==2.10.0</h1>
+<h2 id="需要配置确保万无一失按照顺序来">1.需要配置（确保万无一失，按照顺序来！！）</h2>
+<p>版本号对照可以参考tensorflow官方网站：https://tensorflow.google.cn/install/source_windows?hl=en#gpu<br>
+环境支持可以参考tensorflow官方网站(重点是<strong>软件要求</strong>)：https://tensorflow.google.cn/install/gpu?hl=zh-cn</p>
 <blockquote>
-<p><strong>C5.0算法：</strong><br>
-C5.0是c4.5算法的修订版，适用于处理大数据集，采用Boosting方式提高模型准确率，根据能够带来的最大信息增益的字段拆分样本，占用的内存资源较少。</p>
-<p><strong>CART算法：</strong><br>
-CART决策树是一种十分有效的非参数分类和回归方法，通过构建树、修剪树、评估树来构建一个二叉树。当终结点是连续变量时，该树为回归树;当终结点是分类变量，该树为分类树。</p>
-<p><strong>在Python中，scikit-learn使用CART算法的优化版本;然而，
-scikit-learn实现目前不支持分类变量。</strong></p>
+<p>(1)python 3.7~3.10(这个简单不细说)<br>
+(2)Bazel 5.1.1(这个我没有管，好像本来就有那样。)</p>
+<p><strong>下面三个重点:</strong><br>
+(3)<strong>Compiler：MSVC
+2019</strong>(我尚不知道能否不下载vs可以解决这个问题，我是通过本来就有的vs2022解决的。这个可以理解为是一个<strong>Visual
+Studio
+2019或者更高版本</strong>里面的一个<strong>小组件</strong>，如果电脑有vs那就打开之前安装的那个程序<strong>Visual
+Studio Installer</strong>，因为我是2022的当时安装只有MSVC
+2022，点击修改，然后在右边栏目点击展开<strong>使用c++的桌面开发</strong>，勾选<strong>MSVC
+... VS 2019 C++
+x6...</strong>，右下角修改等待完成即可；如果电脑没有vs，直接百度下载vs即可，我目前是最新的vs2022社区版，后续也会弹出Visual
+Studio Installer，选了c++的桌面开发后，记得勾选<strong>MSVC ... VS 2019
+C++ x6...</strong>，步骤差不多。)<br>
+(4)<strong>CUDA 11.2</strong>(根据文档指示到网站
+https://developer.nvidia.com/cuda-toolkit-archive 中找到CUDA
+11.2版本(网上有说看N卡控制版面那个信息来判断是什么版本，其实<strong>只要不高于N卡控制版面支持的版本就行</strong>，版本不够高就更新自己的n卡驱动)，点击进去选好后点击下载，安装就和安装软件一样点下一步就行，<strong>最好不要改变安装路径直接默认</strong>，可能我本来有n卡驱动缘故，我改了路径也仍然安装在默认路径。)<br>
+(5)<strong>cuDNN 8.1</strong>(根据文档指示到网站
+https://developer.nvidia.com/rdp/cudnn-download 中点击 <strong>"Archived
+cuDNN Releases"</strong>
+能看到以前的版本，<strong>找到8.1版本而且是对应CUDA
+11.2的windows版本</strong>，必须严格对应版本，然后下载得到压缩包，解压后得到里面三个文件夹的意思是：<strong>把三个文件里面的东西放到刚刚安装的CUDA文件根目录(一般在:C:FilesGPU
+Computing
+Toolkit1.2)中分别对应的文件夹名字(bin,include,lib)里面,直接复制粘贴进去对应的文件夹就行。在这里推荐重启电脑一下！！！</strong>)</p>
 </blockquote>
-<h1 id="c5.0算法"><strong>C5.0算法</strong></h1>
+<h2 id="安装步骤确保万无一失按照顺序来">2.安装步骤（确保万无一失，按照顺序来！！）</h2>
 <blockquote>
-<p>1、C5.0 算法是 C4.5 的一个商业化版本，没有十分具体的算法过程。</p>
-<p>2、C5.0
-是一种多叉树（即如果根节点或中间节点存在连续型的自变量，则该变量会一分为二的展开两个分支；如果根节点或中间节点存在离散的自变量，则该变量会根据离散变量的水平数分开多个分支），就会导致某个变量一旦被使用，后面的节点将不会再启用该变量。</p>
+<p>(1)进入你的python安装的包的文件夹(X:···-packages)，将所有有<strong>tensorboard和tensorflow</strong>的文件夹<strong>全部删了</strong>，确保不会出现等下安装的不兼容现象。<br>
+(2)打开命令行输入：<strong>pip install
+tensorflow-gpu==2.10.0</strong>（我没有科学上网下载速度是正常速度），速度慢则选用国内源：<strong>pip
+install tensorflow-gpu==2.10.0 -i
+https://pypi.douban.com/simple</strong>
+，等待安装成功。(国内源自己摸索下。一般到这里不会出问题，有什么问题<strong>重启电脑</strong>再试试这个步骤。有下载慢或者其它pip版本问题的自己简单处理一下即可。)</p>
 </blockquote>
-<h1 id="cart算法"><strong>CART算法</strong></h1>
+<h2 id="测试是否为gpu模式">3.测试是否为gpu模式</h2>
+<p>随便打开一个可以运行python的东西执行下面代码：(<strong>前提是你安装在了那个python环境里</strong>，不过一般小白不会有很多其它的环境)</p>
+<h3 id="测试1">测试1:</h3>
+<pre><code>import tensorflow as tf
+gpus = tf.config.experimental.list_physical_devices(device_type='GPU')
+cpus = tf.config.experimental.list_physical_devices(device_type='CPU')
+print(gpus, cpus)</code></pre>
+<p>执行结果：(显示顺序不重要，<strong>有GPU就行</strong>)</p>
+<pre><code>[PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')] [PhysicalDevice(name='/physical_device:CPU:0', device_type='CPU')]</code></pre>
+<h3 id="测试2">测试2:</h3>
+<pre><code>import tensorflow as tf
+version=tf.__version__  #输出tensorflow版本
+gpu_ok=tf.test.is_gpu_available()  #输出gpu可否使用（True/False）
+print("tf version:",version,"\nuse GPU:",gpu_ok)</code></pre>
+<p>执行结果：(有红色的那些不重要，<strong>有下面那个是True就行</strong>)</p>
+<pre><code>tf version: 2.10.0 
+use GPU: True</code></pre>
+<h3 id="补充-1">补充</h3>
 <blockquote>
-<p>1、CART 算法是一颗二叉树 ( 回归树 )
-，也就是一个结点一般只有左右两个孩子结点。</p>
-<p>2、CART 算法是通过基尼系数 ( Gini coefficient/index )
-来进行最优分割的。</p>
+<p>(1)如果出现了一大推红色，说什么什么.dll无法执行的就重启一下电脑，可能是安装CUDA<strong>没有重启电脑</strong>。<br>
+(2)如果出现tensorflow 2.12.0 什么什么 tensorflow
+2.10.0之类的就是版本各种各样不兼容，<strong>刚刚删除文件夹没有删除完全</strong>，重新删除按照步骤重新来即可。</p>
 </blockquote>
-<p><em>----以上为个人思考与见解，有误请指点，有想法也可联系交流</em></p>
+<p><em>----以上为个人思考与见解，有误请指点，有想法也可联系交流！</em></p>
 <p><span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="7.919ex" height="0.036ex" role="img" focusable="false" viewBox="0 0 3500 16"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3250,0)"><path data-c="A0" d=""></path></g></g></g></svg></mjx-container></span><strong>谢谢观看！</strong></p>
-<p><a target="_blank" rel="noopener" href="https://stringency.github.io/2022/11/02/C4_5_Argorithm_1/">决策树
-—— C4.5 (一) 算法简述</a><br>
-<a target="_blank" rel="noopener" href="https://stringency.github.io/2022/11/02/C4_5_Argorithm_2/">决策树
-—— C4.5 (二) 剪枝细述</a></p>
 
     </div>
     
