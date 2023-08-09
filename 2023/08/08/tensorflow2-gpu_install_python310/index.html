@@ -308,7 +308,7 @@ mjx-container[display="true"] + br {
             
             <span class="tag">
                 
-                <a href="/tags/python/" style="color: #00bcd4">
+                <a href="/tags/python/" style="color: #ffa2c4">
                     python
                 </a>
             </span>
@@ -322,7 +322,7 @@ mjx-container[display="true"] + br {
             
             <span class="tag">
                 
-                <a href="/tags/教程/" style="color: #03a9f4">
+                <a href="/tags/教程/" style="color: #ff7d73">
                     教程
                 </a>
             </span>
@@ -438,21 +438,6 @@ print(add)</code></pre>
 <h3 id="运行结果">运行结果：</h3>
 <pre><code>tf.Tensor([-2 -1], shape=(2,), dtype=int32)
 tf.Tensor([-1  1], shape=(2,), dtype=int32)</code></pre>
-<h2 id="代码2">代码2：</h2>
-<pre><code>import tensorflow as tf
-import numpy as np
-import matplotlib.pyplot as plt
-# 使用 numpy 生成 100 个从 0-1 的随机点，作为 x
-x_data = np.random.rand(100)
-# 生成一些随机扰动
-noise = np.random.normal(0,0.01,x_data.shape)
-# 构建目标值，符合线性分布
-y_data = x_data*0.1 + 0.2 + noise
-# 画散点图
-plt.scatter(x_data, y_data)
-plt.show()</code></pre>
-<h3 id="运行结果-1">运行结果：</h3>
-<pre><code>线性分布的一个散点图。</code></pre>
 <p><em>----以上为个人思考与见解，有误请指点，有想法也可联系交流！</em></p>
 <p><span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="7.919ex" height="0.036ex" role="img" focusable="false" viewBox="0 0 3500 16"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3250,0)"><path data-c="A0" d=""></path></g></g></g></svg></mjx-container></span><strong>谢谢观看！</strong></p>
 
