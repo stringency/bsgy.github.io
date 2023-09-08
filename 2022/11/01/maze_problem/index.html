@@ -1,0 +1,2130 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>
+            迷宫问题（规范格式且有大量注释） | Yaung のBLOGs
+        </title>
+        <meta name="author" content="Yaung">
+        <meta name="description" content="--相互学习和交流！喜欢请收藏加关注！">
+        <meta name="keywords" content="">
+        <link rel="icon" href="https://avatars.githubusercontent.com/u/99268292?s=400&u=43291bc6adefd452c5039e8cfcdfae756c721cf4&v=4">
+
+        <div id="L2dCanvas"></div>
+        <script src="/js/live2d.min.js"></script>
+        <script src="/css/live2d.css"></script>
+        <script>
+            var v = new Viewer({
+                width: 240,
+                height: 325,
+                right: "0",
+                bottom: "0",
+                basePath: "/model",
+                role: "<model-name>",
+                mobile: true,
+            });
+        </script><!-- model样式 -->
+        <script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+        <!-- Anime前置  -->
+        <canvas id="fireworks"
+            style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:2147483647"></canvas>
+        <script src="/js/fireworks.js"></script><!-- 鼠标特效样式 -->
+        <canvas id="background"
+            style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"></canvas>
+        <script src="/js/background.js"></script><!-- 流星背景特效样式 -->
+        <div id="cursor"></div>
+        <script src="/css/cursor.css"></script>
+        <script src="/js/cursor.js"></script><!-- 鼠标指针特效样式 -->
+        <script src="https://cdn.staticfile.org/instant.page/5.1.0/instantpage.min.js" type="module"></script>
+        <script src="https://cdn.staticfile.org/font-awesome/6.2.0/js/all.min.js"></script>
+        
+                <link rel="stylesheet" href="/css/fonts.min.css">
+                <link rel="stylesheet" href="/css/particlex.css">
+                
+                    <script src="https://cdn.staticfile.org/vue/3.2.33/vue.global.prod.min.js"></script>
+
+    <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+    <body>
+        <div id="loading"
+            style="height:100vh;width:100vw;position:fixed;display:flex;z-index:200;justify-content:space-between;background:#fff;transition:opacity 0.3s ease-out">
+            <div style="position:fixed;height:100vh;width:100vw;display:flex;justify-content:center;align-items:center">
+                <div id="loadcontent"
+                    style="width:50vmin;height:50vmin;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px #a3ddfb;text-align:center">
+                    <div>
+                        <h2>LOADING...</h2>
+                        <p style="word-break:keep-all">加载过慢请开启缓存(浏览器默认开启)</p>
+                        <div><img alt="loading" src="/loading.gif"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="layout">
+            <i data-fa-symbol="calendar-solid" class="fa-solid fa-calendar fa-fw"></i>
+            <i data-fa-symbol="bookmark-solid" class="fa-solid fa-bookmark fa-fw"></i>
+            <i data-fa-symbol="tags-solid" class="fa-solid fa-tags fa-fw"></i>
+            <transition name="into">
+                <div v-show="show_page" style="display: -not-none">
+                    <div id="menu_show">
+                         
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Yaung のBLOGs</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;主页</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;简历</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;文章</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;栏目</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;标签</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div class="curtain" @click="menu_show = !menu_show" v-show="menu_show"></div>
+        <div :class="'title'" @click="menu_show = !menu_show">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;Yaung のBLOGs</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">主页</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">简历</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">文章</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">栏目</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">标签</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+                    </div>
+                    <div id="main">
+                        
+<div class="article">
+    <div>
+        <h1>迷宫问题（规范格式且有大量注释） </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <svg class="fa-icon"><use xlink:href="#calendar-solid"></use></svg>
+            </span>
+            2022/11/1
+        </span>
+        
+        <span class="category">
+            <a href="/categories/程序设计/">
+                <span class="icon">
+                    <svg class="fa-icon"><use xlink:href="#bookmark-solid"></use></svg>
+                </span>
+                程序设计
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/c-c/" style="color: #03a9f4">
+                    c/c++
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/回溯算法/" style="color: #00bcd4">
+                    回溯算法
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/路径生成/" style="color: #00a596">
+                    路径生成
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    <div class="content" v-pre>
+        <h1 id="迷宫问题随机路径生成回溯求解迷宫通路可视化">迷宫问题（随机路径生成+回溯求解迷宫通路+可视化）</h1>
+<span id="more"></span>
+<h2 id="一设计要求">一、设计要求</h2>
+<h3 id="问题描述">1.1问题描述</h3>
+<blockquote>
+<ol type="1">
+<li>迷宫问题描述：是一个经典的路径生成和寻路问题，假设有一个n×n矩形网格迷宫，其中一些单元格是由特殊符号形成的障碍物或者墙体而无法通行(障碍物以符号“1”和”-1”进行标记)。初始给定一个起点和终点，然后根据回溯算法找出一条由起点到终点的坐标路径。移动的方法只能是上、下、左、右四个方向，不能斜着移动，不能穿过墙壁。</li>
+<li>随机prim算法为雏形的路径生成算法：将迷宫看成是一棵树，然后在初始化时候设置一些类似与结点的标记，然后通过以prim算法思想为基础生成所需要的树，生成时候选择结点连接的方式将觉得树的形状，最终得到一个无环的迷宫。简单迷宫类似于深度随机，复杂迷宫类似于完全随机抽取一个结点进行连接。</li>
+<li>迷宫各项功能衔接的数据形式：编码-转码-解码，编码主要用于各种逻辑运算和算法实现的操作，转码用于统一储存迷宫的数据形式，解码用于最终可视化迷宫。</li>
+<li>回溯算法：回溯算法是一种基于深度优先搜索的算法，通常用于在一个大状态空间中寻找一个可行解的问题。在问题求解时，将大问题划分为一个个小的子问题进行解决，其复杂度往往非常高，因为它是穷举遍历，其算法的关键在于如何剪枝以减少搜索的空间和保持搜索沿着正确的方向进行。</li>
+</ol>
+</blockquote>
+<h3 id="需求分析">1.2需求分析</h3>
+<blockquote>
+<ol type="1">
+<li>设计产生式系统：</li>
+</ol>
+<ol type="1">
+<li>综合数据库：Sij = {0,1} (i&lt;n，j&lt;n)</li>
+<li>规则库：定义i0j0为当前所在迷宫的最新位置的行和列，即Si0j0=‘0’。</li>
+</ol>
+<ol type="a">
+<li>上移规则：if i0 - 1 &gt;= 0 then i0 -= 1</li>
+<li>右移规则：if j0 + 1 &lt; n then j0 += 1</li>
+<li>左移规则：if j0 - 1 &gt;= 0 then j0 -= 1</li>
+<li>下移规则：if i0 + 1 &lt; n then i0 += 1</li>
+</ol>
+<ol start="3" type="1">
+<li>回溯策略：当目前位置没有规则可行，并且未能到达终点，则回溯一步。</li>
+</ol>
+<ol start="2" type="1">
+<li>程序功能：通过随机生成一个迷宫，然后通过回溯算法找出一条通路。</li>
+<li>输入形式：迷宫大小应为n×n矩阵，n为大于4的奇数整型。</li>
+<li>输出形式：以可视化路径和坐标形式呈现路径反馈给用户。</li>
+<li>测试数据：输入不是规定的数据域时候会提供相应的提示和警告或重新输入。</li>
+</ol>
+</blockquote>
+<h2 id="二概要设计">二、概要设计</h2>
+<h3 id="存储结构设计">2.1存储结构设计</h3>
+<blockquote>
+<ol type="1">
+<li>通过矩阵储存迷宫的布局设计，先用数字储存，然后转码为字符型，最后解码为迷宫形状。</li>
+<li>迷宫的起点和终点坐标均用数字存放，迷宫维度数采用整型存放。</li>
+<li>迷宫中行走的放行通过数组存放。</li>
+<li>通过一个vector容器存放迷宫通路的坐标。</li>
+</ol>
+</blockquote>
+<h3 id="系统功能设计">2.2系统功能设计</h3>
+<blockquote>
+<ol type="1">
+<li>电脑生成迷宫。电脑生成迷宫模块能实现生成简单和复杂迷宫两种，并且获得迷宫的通路答案，可视化迷宫通路并且打印迷宫坐标。</li>
+<li>人工生成迷宫。人工生成迷宫模块能手动按照给定的模板输入迷宫，然后获得迷宫通路答案，可视化迷宫通路并且打印迷宫坐标。</li>
+</ol>
+</blockquote>
+<p>3.2 系统子程序及功能设计<br>
+(1) Status resetMazeData(); //重置迷宫程序的数据结构<br>
+(2) Status initMazeStro(); //初始化生成迷宫储存空间<br>
+(3) Status mazeTransformer(); //迷宫编码转化器<br>
+(4) Status mazeTransformerDisplay(); //打印迷宫形状<br>
+(5) Status mazeDisplay(); //迷宫通路可视化<br>
+(6) Status solveMaze_Maker(int site_x,int site_y);
+//迷宫问题解决方案生成器<br>
+(7) Status SMMR(int x,int y,int dir_flag); //递归挖墙开路<br>
+(8) Status simpleMaze_Menu(); //电脑简单迷宫展示界面<br>
+(9) Status simpleMaze_Maker(); //电脑简单迷宫生成器<br>
+(10) Status CMMR(int x,int y); //随机prim递归挖墙开路<br>
+(11) Status complexMaze_Menu(); //电脑复杂迷宫展示界面<br>
+(12) Status complexMaze_Maker(); //电脑复杂迷宫生成器<br>
+(13) Status computerMazeInti(int **tmp_dir,int tmp_borderS,int
+tmp_borderE,int (&amp;tmp_End)[2]); //电脑生成迷宫的起步初始化<br>
+(14) Status computerMazeEnd(int tmp_borderE,int (&amp;tmp_End)[2]);
+//电脑生成迷宫的结尾终点的连接处理<br>
+(15) Status computerMenu(); //电脑生成迷宫模块子菜单界面<br>
+(16) Status artiMaze_Menu(); //人工迷宫展示界面<br>
+(17) Status artiMaze_Maker(); //人工迷宫输入器+生成器<br>
+(18) Status artificicalMenu(); //人工生成迷宫子菜单界面<br>
+(19) int main() //主函数</p>
+<h2 id="四-详细设计">四 详细设计</h2>
+<h3 id="数据类型定义">4.1 数据类型定义</h3>
+<blockquote>
+<ol type="1">
+<li>宏定义<br>
+#define OK 1 //成功运行状态<br>
+#define ERROR 0 //失败运行状态<br>
+#define OVERFLOWS -1 //数据溢出<br>
+#define DENY 2 //当前状态无解<br>
+#define RESTART 3 //重置程序<br>
+#define Status int //运行状态</li>
+<li>全局变量定义<br>
+int n; //迷宫维数<br>
+int <strong>mazeInt; //手动输入迷宫样式<br>
+char </strong>mazeChar; //迷宫符号转化<br>
+int **mazeFlag; //寻找通路时候标记迷宫格子是否被访问<br>
+int mazeStart[2]; //迷宫起点坐标<br>
+int mazeEnd[2]; //迷宫终点坐标<br>
+vector&lt;vector<int>&gt; mazePassage; //存放通路坐标<br>
+vector&lt;vector<int>&gt; tmp_complexmaze;
+//存放复杂迷宫生成的临时坐标<br>
+vector&lt;vector&lt;vector<int>&gt;&gt;tmp_simplemaze;
+//存放简单迷宫生成时候的临时标记坐标</int></int></int></li>
+</ol>
+</blockquote>
+<h2 id="五完整代码">五、完整代码</h2>
+<p><strong>(ps:由于程序里面提示明确，就不展示使用过程了。)</strong></p>
+<pre><code>    /************************************************************************\
+作者信息：
+    name：Yaung
+    Email: 1422699629@qq.com
+版权声明：
+    版权由Yaung所有，除教学外，未经允许不得拷贝本人作业
+模块名称:
+    迷宫问题系统模块
+摘要:
+    本模块是我的一个课程设计报告，实现两种以prim算法为雏形的自动
+    生成简单与复杂的迷宫和手动输入迷宫还有回溯求解迷宫的功能。
+其它说明:
+    在codeblocks中默认UTF-8编码，在cmd中运行需要在main函数中
+    设置编码形式。
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+    Yaung于2023年3月25日修改本模块，email: 1422699629@qq.com
+    修改原因：完善了部分界面和优化了算法复杂度
+    Yaung于2023年4月18日修改本模块，email: 1422699629@qq.com
+    修改原因：增加了迷宫通路的可视化
+    Yaung于2023年4月22日修改本模块，email: 1422699629@qq.com
+    修改原因：完善了手动输入迷宫形式错误的功能逻辑
+    Yaung于2023年5月4日修改本模块，email: 1422699629@qq.com
+    修改原因：优化算法
+\************************************************************************/
+#include &lt;iostream&gt;
+#include&lt;cstdio&gt;
+#include &lt;cstdlib&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;ctime&gt;
+#include&lt;cmath&gt;
+#include&lt;windows.h&gt;
+using namespace std;
+
+#define OK 1        //成功运行状态
+#define ERROR 0         //失败运行状态
+#define OVERFLOWS -1         //数据溢出
+#define DENY 2         //当前状态无解
+#define RESTART 3       //重置程序
+#define Status  int     //运行状态
+
+//begin-数据结构声明
+int n;  //迷宫维数
+int **mazeInt = nullptr;  //手动输入迷宫样式
+char **mazeChar = nullptr;    //迷宫符号转化
+int **mazeFlag = nullptr; //寻找通路时候标记迷宫格子是否被访问
+int mazeStart[2];   //迷宫起点坐标
+int mazeEnd[2]; //迷宫终点坐标
+vector&lt;vector&lt;int&gt;&gt; mazePassage;    //存放通路坐标
+vector&lt;vector&lt;int&gt;&gt; tmp_complexmaze;    //存放复杂迷宫生成时候的临时标记坐标
+vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;tmp_simplemaze;     //存放简单迷宫生成时候的临时标记坐标
+//end-数据结构声明
+
+//begin-静态数据定义
+const int dir[4][2]= {{-1,0},{0,1},{1,0},{0,-1}}; //行走的方向，上右下左
+//end-静态数据定义
+
+//begin-方法函数声明
+Status resetMazeData();     //重置迷宫程序的数据结构
+Status initMazeStro();     //初始化生成迷宫储存空间
+Status mazeTransformer();       //迷宫编码转化器
+Status mazeTransformerDisplay();    //打印迷宫形状
+Status mazeDisplay();       //迷宫通路可视化
+Status solveMaze_Maker(int site_x,int site_y);       //迷宫问题解决方案生成器
+
+Status SMMR(int x,int y,int dir_flag);      //递归挖墙开路
+Status simpleMaze_Menu();      //电脑简单迷宫展示界面
+Status simpleMaze_Maker();      //电脑简单迷宫生成器
+
+Status CMMR(int x,int y);       //随机prim递归挖墙开路
+Status complexMaze_Menu();    //电脑复杂迷宫展示界面
+Status complexMaze_Maker();    //电脑复杂迷宫生成器
+
+Status computerMazeInti(int **tmp_dir,int tmp_borderS,int tmp_borderE,int (&amp;tmp_End)[2]);  //电脑生成迷宫的起步初始化
+Status computerMazeEnd(int tmp_borderE,int (&amp;tmp_End)[2]);       //电脑生成迷宫的结尾终点的连接处理
+Status computerMenu();         //电脑生成迷宫模块子菜单界面
+
+Status artiMaze_Menu();       //人工迷宫展示界面
+Status artiMaze_Maker();        //人工迷宫输入器+生成器
+Status artificicalMenu();         //人工生成迷宫子菜单界面
+
+int main();
+//end-方法函数声明
+
+/**
+调试方法
+**/
+//void testInt()
+//{
+//    for(int i=0; i&lt;n; i++)
+//    {
+//        for(int j =0; j&lt;n; j++)
+//        {
+//            cout&lt;&lt;mazeInt[i][j]&lt;&lt;" ";
+//        }
+//        cout&lt;&lt;endl;
+//    }
+//}
+//void testChar()
+//{
+//    for(int i=0; i&lt;n; i++)
+//    {
+//        for(int j =0; j&lt;n; j++)
+//        {
+//            cout&lt;&lt;mazeChar[i][j]&lt;&lt;" ";
+//        }
+//        cout&lt;&lt;endl;
+//    }
+//}
+/************************************************************************\
+函数名称:
+    initMazeStro
+功能描述:
+    初始化生成迷宫储存空间
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status initMazeStro()
+{
+    //初始化迷宫标记
+    mazeFlag = new int*[n];
+    for(int i=0; i&lt;n; ++i)
+    {
+        mazeFlag[i] = new int[n];    //数组每个位置生产一个储存n个整型标记的指向数组的指针
+    }
+    for(int i=0; i&lt;n; ++i)  //初始化为0为未访问
+        for(int j=0; j&lt;n; ++j)
+            mazeFlag[i][j]=0;
+    //初始化迷宫符号
+    mazeChar = new char*[n];    //生产n个储存一维数组指针的数组
+    for(int i=0; i&lt;n; ++i)
+    {
+        mazeChar[i] = new char[n];    //数组每个位置生产一个储存n个字符的指向数组的指针
+    }
+    //初始化迷宫数字符号
+    mazeInt = new int*[n];  //生产n个储存一维数组指针的数组
+    for(int i=0; i&lt;n; ++i)
+    {
+        mazeInt[i] = new int[n];    //数组每个位置生产一个储存n个整型的指向数组的指针
+    }
+    for(int i=0; i&lt;n; ++i)  //初始化为0为未访问
+        for(int j=0; j&lt;n; ++j)
+        {
+            if(i==0||i==n-1||j==0||j==n-1)
+            {
+                mazeInt[i][j]=1;
+            }
+            else if(i%2!=0&amp;&amp;j%2!=0)
+            {
+                mazeInt[i][j]=5;
+            }
+            else
+            {
+                mazeInt[i][j]=1;
+            }
+        }
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    resetMazeData
+功能描述:
+    重置迷宫程序的数据结构
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status resetMazeData()
+{
+    //释放指针
+    if(mazeInt==nullptr)
+        delete mazeInt;
+    if(mazeChar==nullptr)
+        delete mazeChar;
+    if(mazeFlag==nullptr)
+        delete mazeFlag;
+    while(!mazePassage.empty()) mazePassage.pop_back();     //释放全部通路
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    mazeTransformer
+功能描述:
+    迷宫编码转化器
+    编码表：
+        墙壁：1/-1--'g'
+        通路：0--' '
+        起点：2--'%'
+        终点：3--'#'
+函数参数:
+    无
+返回值:
+    执行成功：OK，迷宫整型标记形式有误：ERROR
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status mazeTransformer()
+{
+//    testInt();
+    //解码迷宫
+    int start_flag = 0; //只能有一个起点
+    int end_flag = 0;   //必须至少有一个终点
+    for(int i=0; i&lt;n; ++i)  //通过迷宫记号生产迷宫形状
+    {
+        for(int j=0; j&lt;n; ++j)
+        {
+            if(mazeInt[i][j]==1||mazeInt[i][j]==-1)    //墙的生成
+            {
+                mazeChar[i][j] = 'g';
+            }
+            else if(mazeInt[i][j]==0)   //通路生成
+            {
+                mazeChar[i][j] = ' ';
+            }
+            else if(mazeInt[i][j]==2&amp;&amp;start_flag==0)   //起点生成
+            {
+                start_flag = 1;
+                mazeChar[i][j] = '%';
+            }
+            else if(mazeInt[i][j]==3)   //终点生成
+            {
+                end_flag = 1;
+                mazeChar[i][j] = '#';
+            }
+            else
+            {
+                return ERROR;   //错误的迷宫整型标记结构
+            }
+        }
+    }
+    if(end_flag == 0)
+        return ERROR;   //迷宫没有出口
+    return OK;  //成功转化
+}
+/************************************************************************\
+函数名称:
+    mazeTransformerDisplay
+功能描述:
+    打印迷宫形状
+    编码表：
+        墙壁：'g'--'国'
+        通路：' '--'  '
+        起点：'%'--'人'
+        终点：'#'--'门'
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status mazeTransformerDisplay()
+{
+    //打印迷宫
+    for(int i=0; i&lt;n; ++i)
+    {
+        cout&lt;&lt;"\t\t";
+        for(int j=0; j&lt;n; ++j)
+        {
+            if(mazeChar[i][j]=='g')
+            {
+                cout&lt;&lt;"国";
+            }
+            else if(mazeChar[i][j]==' ')
+            {
+                cout&lt;&lt;"  ";
+            }
+            else if(mazeChar[i][j]== '%')
+            {
+                cout&lt;&lt;"人";
+            }
+            else if(mazeChar[i][j]== '#')
+            {
+                cout&lt;&lt;"门";
+            }
+        }
+        cout&lt;&lt;endl;
+    }
+//    testChar();
+    cout&lt;&lt;endl;
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    mazeDisplay
+功能描述:
+    打印迷宫的通路，通路标记为'*'，用红色的'米'展示
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+    Yaung于2023年4月18日添加了在迷宫中添加红色通路功能
+\************************************************************************/
+Status mazeDisplay()
+{
+    auto iterFirst = mazePassage.begin();
+    auto iterEnd = mazePassage.end();
+    ++iterFirst;
+    --iterEnd;
+    cout&lt;&lt;"迷宫的通路图："&lt;&lt;endl&lt;&lt;endl;
+    while(iterFirst!=iterEnd)   //迭代容器内的坐标形成通路
+    {
+        auto iterSiteFirst = (*iterFirst).begin();
+//            auto iterSiteEnd = (*iterEnd).end();
+        auto tmp = *iterSiteFirst;
+        mazeChar[tmp][*(++iterSiteFirst)] = '*';
+        ++iterFirst;
+    }
+    //打印有通路的迷宫
+    for(int i=0; i&lt;n; ++i)
+    {
+        cout&lt;&lt;"\t\t";
+        for(int j=0; j&lt;n; ++j)
+        {
+            if(mazeChar[i][j]=='g')
+            {
+                cout&lt;&lt;"国";
+            }
+            else if(mazeChar[i][j]==' ')
+            {
+                cout&lt;&lt;"  ";
+            }
+            else if(mazeChar[i][j]=='*')
+            {
+                cout&lt;&lt;"\033[0m\033[1;31m米\033[0m";     //红色通路
+            }
+            else if(mazeChar[i][j]== '%')
+            {
+                cout&lt;&lt;"人";
+            }
+            else if(mazeChar[i][j]== '#')
+            {
+                cout&lt;&lt;"门";
+            }
+        }
+        cout&lt;&lt;endl;
+    }
+    cout&lt;&lt;endl;
+    iterFirst = mazePassage.begin();
+    iterEnd = mazePassage.end();
+    cout&lt;&lt;"迷宫的通路坐标："&lt;&lt;endl&lt;&lt;endl;
+    while(iterFirst!=iterEnd)   //迭代容器内的坐标
+    {
+        auto iterSiteFirst = (*iterFirst).begin();
+//            auto iterSiteEnd = (*iterEnd).end();
+        cout&lt;&lt;"("&lt;&lt;*iterSiteFirst&lt;&lt;",";
+        ++iterSiteFirst;
+        cout&lt;&lt;*iterSiteFirst&lt;&lt;")";
+        ++iterFirst;
+    }
+    return OK;  //打印展示成功
+}
+/************************************************************************\
+函数名称:
+    solveMaze_Maker
+功能描述:
+    迷宫问题解决方案生成器函数--回溯算法
+函数参数:
+    迷宫的起点和终点坐标
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status solveMaze_Maker(int site_x,int site_y)
+{
+    if(site_x == mazeEnd[0]&amp;&amp;site_y==mazeEnd[1])    //走到终点返回通路
+    {
+        mazeFlag[site_x][site_y]=1;     //合理位置标记已经访问
+        mazePassage.push_back({site_x,site_y});     //保存通路的坐标之一
+        return OK;
+    }
+    if(site_x&gt;=n||site_x&lt;0||site_y&gt;=n||site_y&lt;0)    //超出界限
+    {
+        return OVERFLOWS;
+    }
+    if((mazeInt[site_x][site_y]==1||mazeInt[site_x][site_y]==-1)||mazeFlag[site_x][site_y]==1) //是墙或者已经访问过了
+    {
+        return ERROR;
+    }
+    mazeFlag[site_x][site_y]=1;     //合理位置标记已经访问
+    mazePassage.push_back({site_x,site_y});     //保存通路的坐标之一
+    vector&lt;vector&lt;int&gt;&gt; rules;      //当前位置的规则集合，上右下左
+    if(site_x-1&gt;=0) //上
+    {
+        rules.push_back({dir[0][0],dir[0][1]});
+    }
+    if(site_y+1&lt;n) //右
+    {
+        rules.push_back({dir[1][0],dir[1][1]});
+    }
+    if(site_x+1&lt;n) //下
+    {
+        rules.push_back({dir[2][0],dir[2][1]});
+    }
+    if(site_y-1&gt;=0) //左
+    {
+        rules.push_back({dir[3][0],dir[3][1]});
+    }
+    while(!rules.empty())
+    {
+        int recallStatus = solveMaze_Maker(site_x+rules[rules.size()-1][0],site_y+rules[rules.size()-1][1]);    //后面的返回状态
+        if(recallStatus==OK)    //找到通路
+        {
+            return OK;
+        }
+        else if(recallStatus==ERROR||recallStatus==OVERFLOWS)    //已经访问或者撞墙或者超出范围
+        {
+            rules.pop_back();
+            continue;
+        }
+        else if(recallStatus==DENY) //当前位置无解
+        {
+            mazePassage.pop_back();
+            rules.pop_back();
+            continue;
+        }
+    }
+    return DENY;//当前状态无解
+}
+/************************************************************************\
+函数名称:
+    SMMR
+功能描述:
+    通过递归生成迷宫道路
+函数参数:
+    预判位置左边x，y，前一个方向参数dir_flag
+返回值:
+    越界返回-1，成功求解返回1，无法访问返回0
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+    Yaung于2023年5月4日创建本模块，email: 1422699629@qq.com
+        修改原因：优化算法，由递归改为动态规划
+\************************************************************************/
+Status SMMR(int x,int y,int dir_flag)    //简单迷宫的递归创造通路，标记前一次的方向-1为无方向
+{
+    //存放方向往回导航,动态规划
+    int tmp_g[n][n];
+    for(int i =0; i&lt;n; ++i)
+        for(int j =0; j&lt;n; ++j)
+            tmp_g[i][j]= -1;
+
+    vector&lt;vector&lt;int&gt;&gt;tmp_dir; //储存每个结点可选方向
+    vector&lt;int&gt;tmp_End;     //储存当前方向信息
+    do
+    {
+        if(x&lt;0||x&gt;=n||y&lt;0||y&gt;=n)    //越界情况直接退出递归
+        {
+            continue;
+        }
+        if(x+2*dir[0][0]&gt;0&amp;&amp;mazeInt[x+2*dir[0][0]][y+2*dir[0][1]]==5)   //上面格子的处理
+        {
+            mazeInt[x+2*dir[0][0]][y+2*dir[0][1]]=6;    //标记为已经分叉的结点
+            tmp_dir.push_back({dir[0][0],dir[0][1],0});
+        }
+        if(y+2*dir[1][1]&lt;n-1&amp;&amp;mazeInt[x+2*dir[1][0]][y+2*dir[1][1]]==5)   //右边格子的处理
+        {
+            mazeInt[x+2*dir[1][0]][y+2*dir[1][1]]=6;
+            tmp_dir.push_back({dir[1][0],dir[1][1],1});
+        }
+        if(x+2*dir[2][0]&lt;n-1&amp;&amp;mazeInt[x+2*dir[2][0]][y+2*dir[2][1]]==5)   //下面格子的处理
+        {
+            mazeInt[x+2*dir[2][0]][y+2*dir[2][1]]=6;
+            tmp_dir.push_back({dir[2][0],dir[2][1],2});
+        }
+        if(y+2*dir[3][1]&gt;0&amp;&amp;mazeInt[x+2*dir[3][0]][y+2*dir[3][1]]==5)   //左边格子的处理
+        {
+            mazeInt[x+2*dir[3][0]][y+2*dir[3][1]]=6;
+            tmp_dir.push_back({dir[3][0],dir[3][1],3});
+        }
+
+        if(tmp_dir.empty())     //当前结点没有可以继续拓展的路时候进行回退开分路
+        {
+            tmp_dir = tmp_simplemaze.back();    //压出保存的项目
+            tmp_simplemaze.pop_back();
+
+            int xx = x;
+            x += 2*dir[(tmp_g[x][y]+2)%4][0];       //返回前一个结点
+            y += 2*dir[(tmp_g[xx][y]+2)%4][1];
+            dir_flag = tmp_g[x][y];
+        }
+        else        //当前结点有路可以探索采用随机方法
+        {
+            //存完后随机打乱容器中的坐标
+            random_shuffle(tmp_dir.begin(),tmp_dir.end());
+            //获取一个新位置
+            tmp_End = tmp_dir.back();
+            tmp_dir.pop_back();
+            tmp_simplemaze.push_back(tmp_dir);  //保存还未访问的方向
+            //当前采取方向
+            x += tmp_End[0]+dir[tmp_End[2]][0];
+            y += tmp_End[1]+dir[tmp_End[2]][1];
+            if(mazeInt[x][y]==5||mazeInt[x][y]==6)    //是5表示未被访问过则常规打通
+            {
+                dir_flag = tmp_End[2];
+                mazeInt[x+dir[(dir_flag+2)%4][0]][y+dir[(dir_flag+2)%4][1]] = 0;        //打通两者中间的墙
+                tmp_g[x+dir[(dir_flag+2)%4][0]][y+dir[(dir_flag+2)%4][1]] = dir_flag;
+                mazeInt[x][y] = 0;
+                tmp_g[x][y] = dir_flag;
+            }
+            //用完就清除临时变量
+            while(!tmp_dir.empty())
+                tmp_dir.pop_back();
+            while(!tmp_End.empty())
+                tmp_End.pop_back();
+            vector&lt;vector&lt;int&gt;&gt;().swap(tmp_dir);
+            vector&lt;int&gt;().swap(tmp_End);
+        }
+
+    }
+    while(!tmp_simplemaze.empty()||!tmp_dir.empty());
+//    for(int i = 0; i&lt;4; ++i)
+//    {
+//        int k = rand()%4;
+//        SMMR(x+dir[k][0]*2,y+dir[k][1]*2,k);  //步长应当为2
+//    }
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    simpleMaze_Maker
+功能描述:
+    电脑简单迷宫生成器算法,生成只有一条路走到终点，十分简单
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status simpleMaze_Maker()      //电脑简单迷宫生成器
+{
+    /**
+    随机生成迷宫数据结构
+    **/
+    resetMazeData();
+    initMazeStro();    //初始化生成迷宫储存空间
+    //随机生成起点和终点，0，1，2，3标记，分别代表上右下左边界上的起点或终端
+//    int tmp_dir[4][2] = {{0,rand()%n},{rand()%n,n-1},{n-1,rand()%n},{rand()%n,0}};
+    int **tmp_dir = new int*[4];
+    for(int i =0; i&lt;4; ++i)
+    {
+        if(i==0)
+        {
+            tmp_dir[i] = new int[2];
+            tmp_dir[i][0] = 0;
+            tmp_dir[i][1] = rand()%n;
+        }
+        else if(i==1)
+        {
+            tmp_dir[i] = new int[2];
+            tmp_dir[i][0] = rand()%n;
+            tmp_dir[i][1] = n-1;
+        }
+        else if(i==2)
+        {
+            tmp_dir[i] = new int[2];
+            tmp_dir[i][0] = n-1;
+//            do
+//            {
+            tmp_dir[i][1] = (tmp_dir[i-2][1]+n/2)%n;
+//            }
+//            while(abs(tmp_dir[i][1]-tmp_dir[i-2][1])&lt;n*4/7);
+        }
+        else if(i==3)
+        {
+            tmp_dir[i] = new int[2];
+//            do
+//            {
+            tmp_dir[i][0] = (tmp_dir[i-2][0]+n/2)%n;
+//            }
+//            while(abs(tmp_dir[i][0]-tmp_dir[i-2][0])&lt;n*4/7);
+            tmp_dir[i][1] = 0;
+        }
+
+    }
+    int tmp_borderS = rand()%4;
+    int tmp_borderE = (tmp_borderS+2)%4;      //默认终端在起点对面边界
+    int tmp_End[2];    //临时终点
+    //起步初始化
+    computerMazeInti(tmp_dir,tmp_borderS,tmp_borderE,tmp_End);
+    SMMR(tmp_End[0],tmp_End[1],-1);    //递归创造通路
+    //结尾终点的连接处理
+    computerMazeEnd(tmp_borderE,tmp_End);
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    simpleMaze_Menu
+功能描述:
+    电脑简单迷宫展示界面
+函数参数:
+    无
+返回值:
+    执行成功：OK，返回主菜单：RESTART
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status simpleMaze_Menu()      //电脑简单迷宫展示界面
+{
+    cout&lt;&lt;" * 输入迷宫维数（4&lt;奇数的维度&lt;110）：";
+    while(!(cin&gt;&gt;n)||(n&lt;=4)||(n%2==0)||(n&gt;=110))        //输入非整型错误
+    {
+        cout&lt;&lt;" * 输入迷宫维数应当为整型奇数（4&lt;维度大小&lt;110）：";
+        cin.clear(); // 清除输入流错误标记
+        cin.sync();// 取走刚才输入流中的字符
+    }
+    do
+    {
+        simpleMaze_Maker();     //生成简单迷宫
+    }
+    while(mazeTransformer()==ERROR);
+
+//    testInt();
+    /**
+    迷宫展示
+    **/
+    char choice;
+    while(1)
+    {
+        system("cls");      //清屏
+        cout&lt;&lt;"\n\t\t\t\t电脑简单迷宫展示界面\n"&lt;&lt;endl;
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"你生成的迷宫："&lt;&lt;endl&lt;&lt;endl;
+        mazeTransformerDisplay();    //将n维迷宫解码为正确形式
+        cout&lt;&lt;"\t\t\t\t 1.生成迷宫通路"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 2.返回上级菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 3.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        switch(choice)      //进入电脑生成迷宫模块的功能函数
+        {
+        case '1':
+            solveMaze_Maker(mazeStart[0],mazeStart[1]); //回溯生成通路
+            cout&lt;&lt;"迷宫的通路："&lt;&lt;endl&lt;&lt;endl;
+            mazeDisplay();  //展示迷宫通路
+            cout&lt;&lt;endl&lt;&lt;endl;
+            break;
+        case '2':
+            return OK;
+        case '3':
+            exit(0);
+        }
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        /**
+        通路打印完毕后的界面
+        **/
+        cout&lt;&lt;"\t\t\t\t 1.再来一个迷宫"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 2.返回主页菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 3.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        switch(choice)      //进入电脑生成迷宫模块的功能函数
+        {
+        case '1':
+            resetMazeData();    //释放指针，重置程序
+            return OK;
+        case '2':
+            resetMazeData();    //释放指针，重置程序
+            return RESTART;
+        case '3':
+            resetMazeData();    //释放指针
+            exit(0);
+        }
+    }
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    computerMazeInti
+功能描述:
+    电脑生成迷宫的起步初始化，默认上右为先
+函数参数:
+    无随机起点位置，起点边界，终点边界，临时终点位置
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status computerMazeInti(int **tmp_dir,int tmp_borderS,int tmp_borderE,int (&amp;tmp_End)[2])
+{
+    //起点
+    mazeStart[0] = tmp_dir[tmp_borderS][0];
+    mazeStart[1] = tmp_dir[tmp_borderS][1];
+    mazeInt[mazeStart[0]][mazeStart[1]] = 2;    //2是标记地图中的起点
+    //终点
+    mazeEnd[0] = tmp_dir[tmp_borderE][0];
+    mazeEnd[1] = tmp_dir[tmp_borderE][1];
+    mazeInt[mazeEnd[0]][mazeEnd[1]] = 3;    //3是标记地图中的终点
+    //边界初始化起步
+    if(tmp_borderS==0)//如果为上边界起点
+    {
+        if(mazeInt[mazeStart[0]+dir[2][0]][mazeStart[1]+dir[2][1]]==5)//下面直接是 5
+        {
+            tmp_End[0] = mazeStart[0]+dir[2][0];    //临时终点的x
+            tmp_End[1] = mazeStart[1]+dir[2][1];    //临时终点的y被标记好
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+        else
+        {
+            //斜边才是 5
+            //以默认主上和右为准，越界相反即可
+            if(mazeStart[1]+1&lt;n)
+            {
+                tmp_End[0] = mazeStart[0]+dir[1][0];
+                tmp_End[1] = mazeStart[1]+dir[1][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeStart[0]+dir[3][0];
+                tmp_End[1] = mazeStart[1]+dir[3][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+            //确定起点
+            tmp_End[0] = tmp_End[0]+dir[2][0];
+            tmp_End[1] = tmp_End[1]+dir[2][1];
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+    }
+    else if(tmp_borderS==1)//如果为右边界起点
+    {
+        if(mazeInt[mazeStart[0]+dir[3][0]][mazeStart[1]+dir[3][1]]==5)//左边直接是 5
+        {
+            tmp_End[0] = mazeStart[0]+dir[3][0];    //临时终点的x
+            tmp_End[1] = mazeStart[1]+dir[3][1];    //临时终点的y被标记好
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+        else
+        {
+            //斜边才是 5
+            //以默认主上和右为准，越界相反即可
+            if(mazeStart[0]-1&gt;=0)
+            {
+                tmp_End[0] = mazeStart[0]+dir[0][0];
+                tmp_End[1] = mazeStart[1]+dir[0][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeStart[0]+dir[2][0];
+                tmp_End[1] = mazeStart[1]+dir[2][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+            //确定起点
+            tmp_End[0] = tmp_End[0]+dir[3][0];
+            tmp_End[1] = tmp_End[1]+dir[3][1];
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+    }
+    else if(tmp_borderS==2)//如果为下边界起点
+    {
+        if(mazeInt[mazeStart[0]+dir[0][0]][mazeStart[1]+dir[0][1]]==5)//上面直接是 5
+        {
+            tmp_End[0] = mazeStart[0]+dir[0][0];    //临时终点的x
+            tmp_End[1] = mazeStart[1]+dir[0][1];    //临时终点的y被标记好
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+        else
+        {
+            //斜边才是 5
+            //以默认主上和右为准，越界相反即可
+            if(mazeStart[1]+1&lt;n)
+            {
+                tmp_End[0] = mazeStart[0]+dir[1][0];
+                tmp_End[1] = mazeStart[1]+dir[1][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeStart[0]+dir[3][0];
+                tmp_End[1] = mazeStart[1]+dir[3][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+            //确定起点
+            tmp_End[0] = tmp_End[0]+dir[0][0];
+            tmp_End[1] = tmp_End[1]+dir[0][1];
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+    }
+    else if(tmp_borderS==3)//如果为左边界起点
+    {
+        if(mazeInt[mazeStart[0]+dir[1][0]][mazeStart[1]+dir[1][1]]==5)//右边直接是 5
+        {
+            tmp_End[0] = mazeStart[0]+dir[1][0];    //临时终点的x
+            tmp_End[1] = mazeStart[1]+dir[1][1];    //临时终点的y被标记好
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+        else
+        {
+            //斜边才是 5
+            //以默认主上和右为准，越界相反即可
+            if(mazeStart[0]-1&gt;=0)
+            {
+                tmp_End[0] = mazeStart[0]+dir[0][0];
+                tmp_End[1] = mazeStart[1]+dir[0][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeStart[0]+dir[2][0];
+                tmp_End[1] = mazeStart[1]+dir[2][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+            //确定起点
+            tmp_End[0] = tmp_End[0]+dir[1][0];
+            tmp_End[1] = tmp_End[1]+dir[1][1];
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+    }
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    computerMazeEnd
+功能描述:
+    电脑生成迷宫的结尾处理，默认上右为先
+函数参数:
+    终点边界，临时终点位置
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status computerMazeEnd(int tmp_borderE,int (&amp;tmp_End)[2])
+{
+    //连接终点，以上和右为默认
+    if(tmp_borderE==0)//如果为上边界起点
+    {
+        if(mazeInt[mazeEnd[0]+dir[2][0]][mazeEnd[1]+dir[2][1]]!=0)//下面不是0
+        {
+            //斜边才是0
+            //以默认主上和右为准，越界相反即可
+            if(mazeEnd[1]+1&lt;n)
+            {
+                tmp_End[0] = mazeEnd[0]+dir[1][0];
+                tmp_End[1] = mazeEnd[1]+dir[1][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeEnd[0]+dir[3][0];
+                tmp_End[1] = mazeEnd[1]+dir[3][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+    }
+    else if(tmp_borderE==1)//如果为右边界起点
+    {
+        if(mazeInt[mazeEnd[0]+dir[3][0]][mazeEnd[1]+dir[3][1]]!=0)//左边不是0
+        {
+            //斜边才是 0
+            //以默认主上和右为准，越界相反即可
+            if(mazeEnd[0]-1&gt;=0)
+            {
+                tmp_End[0] = mazeEnd[0]+dir[0][0];
+                tmp_End[1] = mazeEnd[1]+dir[0][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeEnd[0]+dir[2][0];
+                tmp_End[1] = mazeEnd[1]+dir[2][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+
+    }
+    else if(tmp_borderE==2)//如果为下边界起点
+    {
+        if(mazeInt[mazeEnd[0]+dir[0][0]][mazeEnd[1]+dir[0][1]]!=0)//上面不是0
+        {
+            //斜边才是 0
+            //以默认主上和右为准，越界相反即可
+            if(mazeEnd[1]+1&lt;n)
+            {
+                tmp_End[0] = mazeEnd[0]+dir[1][0];
+                tmp_End[1] = mazeEnd[1]+dir[1][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeEnd[0]+dir[3][0];
+                tmp_End[1] = mazeEnd[1]+dir[3][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+    }
+    else if(tmp_borderE==3)//如果为左边界起点
+    {
+        if(mazeInt[mazeEnd[0]+dir[1][0]][mazeEnd[1]+dir[1][1]]!=0)//右面不是0
+        {
+            //斜边才是 0
+            //以默认主上和右为准，越界相反即可
+            if(mazeEnd[0]-1&gt;=0)
+            {
+                tmp_End[0] = mazeEnd[0]+dir[0][0];
+                tmp_End[1] = mazeEnd[1]+dir[0][1];
+            }
+            else
+            {
+                tmp_End[0] = mazeEnd[0]+dir[2][0];
+                tmp_End[1] = mazeEnd[1]+dir[2][1];
+            }
+            //向一边打通墙
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;       //标记已经访问的地方
+        }
+    }
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    CMMR
+功能描述:
+    复杂迷宫生成通路时候的随机prim递归算法
+函数参数:
+    当前位置x,y
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status CMMR(int x,int y)
+{
+    vector&lt;int&gt; tmp_End;     //临时终点位置
+    do
+    {
+        //标记附近的合法位置为6
+        if(x+dir[0][0]&gt;0&amp;&amp;mazeInt[x+dir[0][0]][y+dir[0][1]]==1)   //上面格子的处理
+        {
+            mazeInt[x+dir[0][0]][y+dir[0][1]]=6;
+            tmp_complexmaze.push_back({x+dir[0][0],y+dir[0][1],0});
+        }
+        if(y+dir[1][1]&lt;n-1&amp;&amp;mazeInt[x+dir[1][0]][y+dir[1][1]]==1)   //右边格子的处理
+        {
+            mazeInt[x+dir[1][0]][y+dir[1][1]]=6;
+            tmp_complexmaze.push_back({x+dir[1][0],y+dir[1][1],1});
+        }
+        if(x+dir[2][0]&lt;n-1&amp;&amp;mazeInt[x+dir[2][0]][y+dir[2][1]]==1)   //下面格子的处理
+        {
+            mazeInt[x+dir[2][0]][y+dir[2][1]]=6;
+            tmp_complexmaze.push_back({x+dir[2][0],y+dir[2][1],2});
+        }
+        if(y+dir[3][1]&gt;0&amp;&amp;mazeInt[x+dir[3][0]][y+dir[3][1]]==1)   //左边格子的处理
+        {
+            mazeInt[x+dir[3][0]][y+dir[3][1]]=6;
+            tmp_complexmaze.push_back({x+dir[3][0],y+dir[3][1],3});
+        }
+        //存完后随机打乱容器中的坐标
+        random_shuffle(tmp_complexmaze.begin(),tmp_complexmaze.end());
+        //获取一个新位置
+        tmp_End = tmp_complexmaze.back();
+        tmp_complexmaze.pop_back();
+        x = tmp_End[0]+dir[tmp_End[2]][0];
+        y = tmp_End[1]+dir[tmp_End[2]][1];
+        if(mazeInt[x][y]==5)    //是5表示未被访问过则常规打通
+        {
+            mazeInt[tmp_End[0]][tmp_End[1]] = 0;
+            mazeInt[x][y] = 0;
+        }
+        else if(mazeInt[x][y]==0)   //如果是0证明已经被访问过，直接封了当前的路
+        {
+            mazeInt[tmp_End[0]][tmp_End[1]] = -1;
+        }
+        //用完就清除临时变量
+        while(!tmp_End.empty())
+            tmp_End.pop_back();
+    }
+    while(!tmp_complexmaze.empty());
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    complexMaze_Maker
+功能描述:
+    电脑复杂迷宫算法通过随机prim算法的雏形
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status complexMaze_Maker()      //电脑简单迷宫生成器
+{
+    /**
+    随机生成迷宫数据结构
+    **/
+    resetMazeData();
+    initMazeStro();    //初始化生成迷宫储存空间
+    //随机生成起点和终点，0，1，2，3标记，分别代表上右下左边界上的起点或终端
+//    int tmp_dir[4][2] = {{0,rand()%n},{rand()%n,n-1},{n-1,rand()%n},{rand()%n,0}};
+    int **tmp_dir = new int*[4];
+    for(int i =0; i&lt;4; ++i)
+    {
+        if(i==0)
+        {
+            tmp_dir[i] = new int[2];
+            tmp_dir[i][0] = 0;
+            tmp_dir[i][1] = rand()%n;
+        }
+        else if(i==1)
+        {
+            tmp_dir[i] = new int[2];
+            tmp_dir[i][0] = rand()%n;
+            tmp_dir[i][1] = n-1;
+        }
+        else if(i==2)
+        {
+            tmp_dir[i] = new int[2];
+            tmp_dir[i][0] = n-1;
+//            do
+//            {
+            tmp_dir[i][1] = (tmp_dir[i-2][1]+n/2)%n;
+//            }
+//            while(abs(tmp_dir[i][1]-tmp_dir[i-2][1])&lt;n*4/7);//使得迷宫起点和终点间隔远点
+        }
+        else if(i==3)
+        {
+            tmp_dir[i] = new int[2];
+//            do
+//            {
+            tmp_dir[i][0] = (tmp_dir[i-2][0]+n/2)%n;
+//            }
+//            while(abs(tmp_dir[i][0]-tmp_dir[i-2][0])&lt;n*4/7);
+            tmp_dir[i][1] = 0;
+        }
+
+    }
+    int tmp_borderS = rand()%4;
+    int tmp_borderE = (tmp_borderS+2)%4;      //默认终端在起点对面边界
+    int tmp_End[2];    //临时终点
+    //起步初始化
+    computerMazeInti(tmp_dir,tmp_borderS,tmp_borderE,tmp_End);
+    CMMR(tmp_End[0],tmp_End[1]);     //递归生成道路
+    //结尾终点的连接处理
+    computerMazeEnd(tmp_borderE,tmp_End);
+
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    complexMaze_Menu
+功能描述:
+    电脑自动生成复杂迷宫展示界面
+函数参数:
+    无
+返回值:
+    执行成功：OK，返回主菜单：RESTART
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status complexMaze_Menu()      //电脑复杂迷宫展示界面
+{
+    cout&lt;&lt;" * 输入迷宫维数（4&lt;奇数的维度&lt;110）：";
+    while(!(cin&gt;&gt;n)||(n&lt;=4)||(n%2==0)||(n&gt;=110))        //输入非整型错误
+    {
+        cout&lt;&lt;" * 输入迷宫维数应当为整型奇数（4&lt;维度大小&lt;110）：";
+        cin.clear(); // 清除输入流错误标记
+        cin.sync();// 取走刚才输入流中的字符
+    }
+    do
+    {
+        complexMaze_Maker();     //生成复杂迷宫
+    }
+    while(mazeTransformer()==ERROR);
+
+//    testInt();
+    /**
+    迷宫展示
+    **/
+    char choice;
+    while(1)
+    {
+        system("cls");      //清屏
+        cout&lt;&lt;"\n\t\t\t\t电脑复杂迷宫展示界面\n"&lt;&lt;endl;
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"你生成的迷宫："&lt;&lt;endl&lt;&lt;endl;
+        mazeTransformerDisplay();       //将n维迷宫解码为正确形式
+
+        cout&lt;&lt;"\t\t\t\t 1.生成迷宫通路"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 2.返回上级菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 3.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        switch(choice)      //进入电脑生成迷宫模块的功能函数
+        {
+        case '1':
+            solveMaze_Maker(mazeStart[0],mazeStart[1]); //回溯生成通路
+            cout&lt;&lt;"迷宫的通路："&lt;&lt;endl&lt;&lt;endl;
+            mazeDisplay();  //展示迷宫通路
+            cout&lt;&lt;endl&lt;&lt;endl;
+            break;
+        case '2':
+            return OK;
+        case '3':
+            exit(0);
+        }
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        /**
+        通路打印完毕后的界面
+        **/
+        cout&lt;&lt;"\t\t\t\t 1.再来一个迷宫"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 2.返回主页菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 3.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        switch(choice)      //进入电脑生成迷宫模块的功能函数
+        {
+        case '1':
+            resetMazeData();    //释放指针，重置程序
+            return OK;
+        case '2':
+            resetMazeData();    //释放指针，重置程序
+            return RESTART;
+        case '3':
+            resetMazeData();    //释放指针
+            exit(0);
+        }
+    }
+    return OK;
+}
+/************************************************************************\
+函数名称:
+    computerMenu
+功能描述:
+    电脑自动生成迷宫的菜单栏目界面展示
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status computerMenu()        //电脑生成迷宫模块子菜单界面函数
+{
+    char choice;
+    while(1)
+    {
+        system("cls");      //清屏
+        cout&lt;&lt;"\n\t\t\t\t电脑生成迷宫菜单\n"&lt;&lt;endl;
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 1.生成简单迷宫"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 2.生成复杂迷宫"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 3.返回上级菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 4.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3'&amp;&amp;choice!='4')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        int SimComMaze_Maker_Status;  //返回简单生成迷宫的返回值
+        int CompComMaze_Maker_Status;   //返回复杂生成迷宫的返回值
+        switch(choice)      //进入电脑生成迷宫模块的功能函数
+        {
+        case '1':
+            SimComMaze_Maker_Status = simpleMaze_Menu();      //电脑简单迷宫展示界面
+            if(SimComMaze_Maker_Status==RESTART)  //返回主菜单，重置程序
+            {
+                return OK;
+            }
+            else if(SimComMaze_Maker_Status==OK)  //再来一个迷宫
+            {
+                break;
+            }
+            break;
+        case '2':
+            CompComMaze_Maker_Status = complexMaze_Menu();      //电脑复杂迷宫展示界面
+            if(CompComMaze_Maker_Status==RESTART)  //返回主菜单，重置程序
+            {
+                return OK;
+            }
+            else if(CompComMaze_Maker_Status==OK)  //再来一个迷宫
+            {
+                break;
+            }
+            break;
+        case '3':
+            return OK;
+        case '4':
+            exit(0);
+        }
+    }
+}
+/************************************************************************\
+函数名称:
+    artiMaze_Maker
+功能描述:
+    人工迷宫输入器和生成器
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+    Yaung于2023年4月2日修改本模块，email: 1422699629@qq.com
+    修改原因：增加对于输入迷宫形式错误的处理
+\************************************************************************/
+Status artiMaze_Maker()       //人工迷宫输入器和生成器
+{
+    resetMazeData();
+    /**
+    接受用户输入的信息并且等待转化为迷宫
+    **/
+    initMazeStro();    //初始化生成迷宫储存空间
+    /*
+    例子：
+    5
+    1 1 1 1 1
+    2 0 0 0 1
+    1 1 0 1 1
+    1 1 0 0 3
+    1 1 1 1 1
+    6
+    1 1 1 1 1 1
+    2 0 0 0 1 1
+    1 1 0 0 0 1
+    1 1 1 1 0 1
+    1 1 0 0 0 1
+    1 1 3 1 a 1
+    */
+    cout&lt;&lt;" * 输入迷宫每行的符号："&lt;&lt;endl;
+    int tmp;
+    for(int i=0; i&lt;n; ++i)  //生产一个迷宫记号
+    {
+        for(int j=0; j&lt;n; ++j)
+        {
+            while(!(cin&gt;&gt;tmp))        //输入非整型错误
+            {
+                cout&lt;&lt;" * 警告，输入类型错误！："&lt;&lt;endl;
+                cin.clear(); // 清除输入流错误标记
+                cin.sync();// 取走刚才输入流中的字符
+                return ERROR;
+            }
+            if(tmp==2)  //标记起点坐标
+            {
+                mazeStart[0] = i;
+                mazeStart[1] = j;
+            }
+            if(tmp==3)    //标记终点坐标
+            {
+                mazeEnd[0] = i;
+                mazeEnd[1] = j;
+            }
+            mazeInt[i][j]=tmp;
+        }
+
+    }
+    return OK;
+}
+
+/************************************************************************\
+函数名称:
+    artiMaze_Menu
+功能描述:
+    人工迷宫展示界面
+函数参数:
+    无
+返回值:
+    执行成功：OK，返回主菜单：RESTART
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status artiMaze_Menu()       //人工迷宫展示界面
+{
+    cout&lt;&lt;" * 输入迷宫维数（n&gt;4）：";
+    while(!(cin&gt;&gt;n)||(n&lt;=4))        //输入非整型错误
+    {
+        cout&lt;&lt;" * 输入迷宫维数应当为大于4的整型数字：";
+        cin.clear(); // 清除输入流错误标记
+        cin.sync();// 取走刚才输入流中的字符
+    }
+    int status_input;
+    int status_artiMaze;
+    do
+    {
+        status_input = artiMaze_Maker();   //输入迷宫
+        if(status_input == ERROR)
+        {
+            continue;
+        }
+
+        status_artiMaze = mazeTransformer();
+        if(status_artiMaze==ERROR)
+        {
+            cout&lt;&lt;"输入迷宫格式有误！请重新输入！"&lt;&lt;endl;
+        }
+    }
+    while(status_artiMaze==ERROR||status_input==ERROR);
+    /**
+    迷宫界面生成打印
+    **/
+    cin.sync();
+    char choice;
+    while(1)
+    {
+        system("cls");      //清屏
+        cout&lt;&lt;"\n\t\t\t\t人工迷宫展示界面\n"&lt;&lt;endl;
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"你生成的迷宫："&lt;&lt;endl&lt;&lt;endl;
+        mazeTransformerDisplay(); //将n维迷宫解码为正确形式
+        cout&lt;&lt;"\t\t\t\t 1.生成迷宫通路"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 2.重新输入迷宫"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 3.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        int status_solveMaze;   //迷宫的求解状态
+        switch(choice)      //进入电脑生成迷宫模块的功能函数
+        {
+        case '1':
+            status_solveMaze = solveMaze_Maker(mazeStart[0],mazeStart[1]);
+            if(status_solveMaze==OK) //回溯生成通路
+            {
+                mazeDisplay();  //展示迷宫通路
+            }
+            else if(status_solveMaze==DENY)
+            {
+                cout&lt;&lt;endl&lt;&lt;"\t\033[0m\033[1;31m此迷宫无解！\033[0m"&lt;&lt;endl;
+            }
+            cout&lt;&lt;endl&lt;&lt;endl;
+            break;
+        case '2':
+            return OK;
+        case '3':
+            exit(0);
+        }
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        /**
+        通路打印完毕后的界面
+        **/
+        cout&lt;&lt;"\t\t\t\t 1.再来一个迷宫"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 2.返回主页菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t\t 3.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        switch(choice)      //进入电脑生成迷宫模块的功能函数
+        {
+        case '1':
+            resetMazeData();    //释放指针，重置程序
+            return OK;
+        case '2':
+            resetMazeData();    //释放指针，重置程序
+            return RESTART;
+        case '3':
+            resetMazeData();    //释放指针
+            exit(0);
+        }
+    }
+}
+/************************************************************************\
+函数名称:
+    artificicalMenu
+功能描述:
+    人工生成迷宫的菜单栏目界面展示与输入格式说明
+函数参数:
+    无
+返回值:
+    执行成功：OK
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+\************************************************************************/
+Status artificicalMenu()       //人工生成迷宫菜单函数
+{
+    {
+        char choice;
+
+        while(1)
+        {
+            system("cls");      //清屏
+            cout&lt;&lt;"\n\t\t\t\t人工生成迷宫菜单\n"&lt;&lt;endl;
+            for(int i=0; i&lt;80; ++i) cout&lt;&lt;"-";
+            cout&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"\t* 1.说明：输入\"1\"作为迷宫的墙壁，输入\"0\"作为迷宫的可行进路径，输\n\t* 入\"2\"为起点(或当前位置)，输入\"3\"为迷宫出口，以坐标形式说明\n\t* 起点和出口并形成其通路路径。"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"例子："&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;" * 输入迷宫维数为：4(按回车)"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;" * 输入迷宫每行的符号：(注：优先在纸上绘制好迷宫)"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"     1 1 1 1(按回车)"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"     2 0 0 1(按回车)"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"     1 1 0 3(按回车)"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"     1 1 1 1(按回车)"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"\t* 2.说明：\"1\"变为\"国\"作为迷宫的墙壁，\"0\"变为\" \"作为迷宫的可行进路径，\n\t* \"2\"变为 \"%\"作为起点(或当前位置)，\"3\"变为 \"#\"为迷宫出口，以坐标形式说明\n\t* 起点到出口的通路路径。"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"生成迷宫形状："&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"     国国国国"&lt;&lt;endl;
+            cout&lt;&lt;"     人    国"&lt;&lt;endl; //4空格
+            cout&lt;&lt;"     国国  门"&lt;&lt;endl;  //2空格
+            cout&lt;&lt;"     国国国国"&lt;&lt;endl&lt;&lt;endl;//  \e[1;31m米\e[0m
+            cout&lt;&lt;" * 迷宫的通路图："&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"     国国国国"&lt;&lt;endl;
+            cout&lt;&lt;"     人\033[0m\033[1;31m米\033[0m\033[0m\033[1;31m米\033[0m国"&lt;&lt;endl; //4空格
+            cout&lt;&lt;"     国国\033[0m\033[1;31m米\033[0m门"&lt;&lt;endl;  //2空格
+            cout&lt;&lt;"     国国国国"&lt;&lt;endl&lt;&lt;endl;//\e[1;31m米\e[0m
+            cout&lt;&lt;" * 迷宫的通路坐标：(2,1)(2,2)(2,3)(3,3)(3,4)"&lt;&lt;endl&lt;&lt;endl;
+            for(int i=0; i&lt;33; ++i) cout&lt;&lt;"-";
+            cout&lt;&lt;"举例说明结束！";
+            for(int i=0; i&lt;33; ++i) cout&lt;&lt;"-";
+            cout&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"\t\t\t\t 1.开始输入迷宫"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"\t\t\t\t 2.返回上级菜单"&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;"\t\t\t\t 3.退出迷宫程序"&lt;&lt;endl&lt;&lt;endl;
+            for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+            cout&lt;&lt;"感谢使用本程序！";
+            for(int i=0; i&lt;32; ++i) cout&lt;&lt;"-";
+            cout&lt;&lt;endl&lt;&lt;endl;
+            cout&lt;&lt;" * 请输入你的选项并按回车：";
+            cin&gt;&gt;choice;
+            while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+            {
+                if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+                {
+                    cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                    cout&lt;&lt;" * 请输入正确选项并按回车：";
+                    cin&gt;&gt;choice;
+                }
+                else        //输入值错误提示
+                {
+                    cout&lt;&lt;" * 请输入正确选项并按回车：";
+                    cin&gt;&gt;choice;
+                }
+            }
+            int artiMaze_Maker_Status;
+            switch(choice)      //进入电脑生成迷宫模块的功能函数
+            {
+            case '1'://自己输入迷宫生成器
+                artiMaze_Maker_Status = artiMaze_Menu();
+                if(artiMaze_Maker_Status==RESTART)  //返回主菜单，重置程序
+                {
+                    return OK;
+                }
+                else if(artiMaze_Maker_Status==OK)  //再来一个迷宫
+                {
+                    break;
+                }
+            case '2':
+                return OK;
+            case '3':
+                exit(0);
+            }
+        }
+    }
+}
+/************************************************************************\
+函数名称:
+    main
+功能描述:
+    迷宫问题系统主菜单界面展示
+函数参数:
+    无
+返回值:
+    正常：0
+模块  :
+    Yaung于2023年3月3日创建本模块，email: 1422699629@qq.com
+    Yaung于2023年5月4日修改本模块，email: 1422699629@qq.com
+        修改原因：增加对于编码的设置使得cmd也能正常运行
+\************************************************************************/
+int main()//#腾讯会议：529-875-839
+{
+    //主函数
+//    system("chcp 65001");   //编码设置
+    srand((unsigned)time(NULL));    //设置运行程序时间为随机种子
+    char choice;         //选项值
+    do
+    {
+        system("cls");      //清屏
+        cout&lt;&lt;"\n\t\t\t\t迷宫问题主菜单\n"&lt;&lt;endl;
+        for(int i=0; i&lt;80; ++i) cout&lt;&lt;"*";
+        cout&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t      1.电脑生成迷宫菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t      2.人工生成迷宫菜单"&lt;&lt;endl&lt;&lt;endl;
+        cout&lt;&lt;"\t\t\t      3.退出迷宫问题程序"&lt;&lt;endl&lt;&lt;endl;
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"*";
+        cout&lt;&lt;"感谢使用本程序！";
+        for(int i=0; i&lt;32; ++i) cout&lt;&lt;"*";
+        cout&lt;&lt;endl&lt;&lt;endl;
+
+        cout&lt;&lt;" * 请输入你的选项并按回车：";
+        cin&gt;&gt;choice;
+        while(choice!='1'&amp;&amp;choice!='2'&amp;&amp;choice!='3')        //判断选项是否为规定值
+        {
+            if(choice&gt;'9'||choice&lt;'0')      //输入类型错误提示
+            {
+                cout&lt;&lt;" * 警告！输入类型错误！！"&lt;&lt;endl;
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+            else        //输入值错误提示
+            {
+                cout&lt;&lt;" * 请输入正确选项并按回车：";
+                cin&gt;&gt;choice;
+            }
+        }
+        switch(choice)
+        {
+        case '1':
+            computerMenu();     //电脑生成迷宫菜单
+            break;
+        case '2':
+            artificicalMenu();      //自己生成迷宫菜单
+            break;
+        }
+    }
+    while(choice!='3');
+    return 0;
+}</code></pre>
+<p><em>----以上为个人思考与见解，有误请指点，有想法也可联系交流！</em></p>
+<p><span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="7.919ex" height="0.036ex" role="img" focusable="false" viewBox="0 0 3500 16"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(1750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2250,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2500,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(2750,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3000,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" transform="translate(3250,0)"><path data-c="A0" d=""></path></g></g></g></svg></mjx-container></span><strong>谢谢观看，点赞是对作者的最大支持！！</strong><br>
+<!-- 
+$$
+\begin{align*}
+\left(\sqrt{2}-1\right)q_{0}&=\sqrt{2}\left(\sqrt{2}-1\right)t_{0}&\text{（令 $t_{0}'=\left(\sqrt{2}-1\right)t_{0}$~~~~且$t_{0}'\in N$）}\\
+\left(\sqrt{2}-1\right)q_{0}&=\sqrt{2}t_{0}'&\text{（令 $q_{0}'=\left(\sqrt{2}-1\right)q_{0}$~~~~且 $q_{0}'\in N$）}\\
+q_{0}'&=\sqrt{2}t_{0}' 
+\end{align*}
+$$
+
+$$
+f(x) = \frac{x^2}{x+y}
+$$ --></p>
+
+    </div>
+    
+    
+</div>
+                             
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2022 - 2023 Yaung のBLOGs
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @Yaung
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+                    </div>
+                </div>
+            </transition>
+            <div id="img_show">
+                <img id="img_content" alt="img_show">
+            </div>
+        </div>
+        <script src="https://cdn.staticfile.org/highlight.js/11.5.1/highlight.min.js"></script>
+        <script src="/js/particlex.js"></script>
+        <script src="/js/showimg.js"></script>
+        
+
+    </body>
+
+    </html>
